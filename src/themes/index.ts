@@ -1,27 +1,10 @@
-import { ThemeConfig } from "../types";
-import darkTheme from "./dark";
-import lightTheme from "./light";
-import venomTheme from "./venom";
+import { ThemeConfig } from '../types';
+import { theme } from './theme';
 
 export const themesList = {
-  default: lightTheme,
-  [lightTheme.name]: lightTheme,
-  [darkTheme.name]: darkTheme,
-  [venomTheme.name]: venomTheme,
+  [theme.name]: theme
 };
 
-export type ThemeNameList =
-  | typeof lightTheme.name
-  | typeof darkTheme.name
-  | typeof venomTheme.name;
-
-export const getThemeConfig = (
-  theme: ThemeNameList | ThemeConfig["theme"]
-): ThemeConfig => {
-  return typeof theme === "string"
-    ? themesList[theme]
-    : {
-        name: "custom",
-        theme,
-      };
+export const getThemeConfig = (): ThemeConfig => {
+  return themesList[theme.name];
 };

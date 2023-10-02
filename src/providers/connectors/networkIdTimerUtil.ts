@@ -13,9 +13,7 @@ export const setupNetworkIdTimer = (
       let isAllowedId = true;
       if (allowedNetworkIds !== undefined) {
         if (Array.isArray(allowedNetworkIds)) {
-          isAllowedId = !!allowedNetworkIds.find(
-            (id) => state.networkId === id
-          );
+          isAllowedId = !!allowedNetworkIds.find(id => state.networkId === id);
         } else {
           isAllowedId = state.networkId === allowedNetworkIds;
         }
@@ -25,7 +23,7 @@ export const setupNetworkIdTimer = (
       // console.log('TESING NET', allowedNetworkIds, state)
       // console.log('E SET TO WRONG', state && address && !isAllowedId)
       window.updateVenomModal({
-        wrongNetwork: isAuth ? state && address && !isAllowedId : undefined,
+        wrongNetwork: isAuth ? state && address && !isAllowedId : undefined
       });
       // console.log('E SET TO', state && state.permissions?.accountInteraction?.address && state.networkId !== 1000)
     }, 1000);

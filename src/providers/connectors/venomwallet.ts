@@ -1,10 +1,10 @@
-import { toggleExtensionWindow } from "../../helpers/backdrop";
-import { getKey as getKeyRaw, log, makeMove } from "../../helpers/utils";
-import { Callbacks } from "../../types";
-import { setupNetworkIdTimer } from "./networkIdTimerUtil";
+import { toggleExtensionWindow } from '../../helpers/backdrop';
+import { getKey as getKeyRaw, log, makeMove } from '../../helpers/utils';
+import { Callbacks } from '../../types';
+import { setupNetworkIdTimer } from './networkIdTimerUtil';
 
 // checked for version "everscale-inpage-provider": "^0.3.28",
-export const venomWalletName = "Venom Wallet";
+export const venomWalletName = 'Venom Wallet';
 
 const getKey = (type: string) => getKeyRaw(venomWalletName, type);
 
@@ -17,9 +17,9 @@ export const checkIsProviderExist = async (venomProvider: any) => {
 
     if (!isExist) {
       log({
-        type: "error",
+        type: 'error',
         key: venomWalletName,
-        value: "Extension is not installed",
+        value: 'Extension is not installed'
       });
     }
 
@@ -35,19 +35,19 @@ export const checkIsProviderExist = async (venomProvider: any) => {
  */
 const checkVenomWalletAuth = async (VenomProvider: any, options: any) => {
   try {
-    const key = getKey("extension/auth");
+    const key = getKey('extension/auth');
 
     log({
       key,
-      value: "check auth start",
+      value: 'check auth start'
     });
 
     const venomProvider = await makeMove(
       {
-        before: "provider creating",
-        after: "provider created",
-        error: "provider creating failed",
-        key,
+        before: 'provider creating',
+        after: 'provider created',
+        error: 'provider creating failed',
+        key
       },
       async () => {
         return new VenomProvider(options);
@@ -56,10 +56,10 @@ const checkVenomWalletAuth = async (VenomProvider: any, options: any) => {
 
     await makeMove(
       {
-        before: "injected provider checking",
-        after: "provider injected",
-        error: "injected provider checking failed",
-        key,
+        before: 'injected provider checking',
+        after: 'provider injected',
+        error: 'injected provider checking failed',
+        key
       },
       async () => {
         const isExist = checkIsProviderExist(venomProvider);
@@ -70,10 +70,10 @@ const checkVenomWalletAuth = async (VenomProvider: any, options: any) => {
 
     const auth = await makeMove(
       {
-        before: "auth checking",
-        after: "auth checked",
-        error: "auth checking failed",
-        key,
+        before: 'auth checking',
+        after: 'auth checked',
+        error: 'auth checking failed',
+        key
       },
       async () => {
         const getProviderState = await venomProvider?.getProviderState?.();
@@ -90,12 +90,12 @@ const checkVenomWalletAuth = async (VenomProvider: any, options: any) => {
 
     log({
       key,
-      value: "check auth end",
+      value: 'check auth end'
     });
 
     return {
       auth,
-      fallback: venomProvider,
+      fallback: venomProvider
     };
   } catch (error) {
     // console.error(error);
@@ -113,19 +113,19 @@ const connectToVenomWallet = async (
   callbacks: Callbacks
 ) => {
   try {
-    const key = getKey("extension");
+    const key = getKey('extension');
 
     log({
       key,
-      value: "connection start",
+      value: 'connection start'
     });
 
     const venomProvider = await makeMove(
       {
-        before: "provider creating",
-        after: "provider created",
-        error: "provider creating failed",
-        key,
+        before: 'provider creating',
+        after: 'provider created',
+        error: 'provider creating failed',
+        key
       },
       async () => {
         return new VenomProvider(options);
@@ -134,10 +134,10 @@ const connectToVenomWallet = async (
 
     await makeMove(
       {
-        before: "injected provider checking",
-        after: "provider injected",
-        error: "injected provider checking failed",
-        key,
+        before: 'injected provider checking',
+        after: 'provider injected',
+        error: 'injected provider checking failed',
+        key
       },
       async () => {
         const isExist = checkIsProviderExist(venomProvider);
@@ -146,33 +146,29 @@ const connectToVenomWallet = async (
       }
     );
 
-    const permissions = ["basic", "accountInteraction"];
+    const permissions = ['basic', 'accountInteraction'];
 
     await toggleExtensionWindow({
-      isExtensionWindowOpen: true,
+      isExtensionWindowOpen: true
     });
 
     await makeMove(
       {
-        before: `permissions requesting (${permissions.join(", ")})`,
-        after: "permissions requested",
-        error: "permissions requesting failed",
-        key,
+        before: `permissions requesting (${permissions.join(', ')})`,
+        after: 'permissions requested',
+        error: 'permissions requesting failed',
+        key
       },
       async () => {
         const { accountInteraction } = await venomProvider?.requestPermissions({
-          permissions,
+          permissions
         });
 
         if (accountInteraction == null) {
-          throw new Error("Insufficient permissions");
+          throw new Error('Insufficient permissions');
         }
 
-        setupNetworkIdTimer(
-          accountInteraction.address,
-          venomProvider,
-          options.checkNetworkId
-        );
+        setupNetworkIdTimer(accountInteraction.address, venomProvider, options.checkNetworkId);
 
         return accountInteraction;
       }
@@ -180,19 +176,19 @@ const connectToVenomWallet = async (
 
     log({
       key,
-      value: "connection end",
+      value: 'connection end'
     });
 
     callbacks.authorizationCompleted(venomProvider);
 
     await toggleExtensionWindow({
-      isExtensionWindowOpen: false,
+      isExtensionWindowOpen: false
     });
 
     return venomProvider;
   } catch (error: any) {
     let emessage;
-    if (typeof error === "object") {
+    if (typeof error === 'object') {
       if (error.message) {
         emessage = error.message; // get the error message
       } else {
@@ -204,7 +200,7 @@ const connectToVenomWallet = async (
     callbacks.extensionWindowError(emessage);
   } finally {
     await toggleExtensionWindow({
-      isExtensionWindowOpen: false,
+      isExtensionWindowOpen: false
     });
   }
 };
@@ -213,24 +209,21 @@ const connectToVenomWallet = async (
  * venomProvider: ProviderRpcClient,
  * options: any | undefined
  */
-const getStandaloneConnectionToVenomWallet = async (
-  VenomProvider: any,
-  options: any
-) => {
+const getStandaloneConnectionToVenomWallet = async (VenomProvider: any, options: any) => {
   try {
-    const key = getKey("extension");
+    const key = getKey('extension');
 
     log({
       key,
-      value: "standalone start",
+      value: 'standalone start'
     });
 
     const venomProvider = await makeMove(
       {
-        before: "standalone provider creating",
-        after: "standalone provider created",
-        error: "standalone provider creating failed",
-        key,
+        before: 'standalone provider creating',
+        after: 'standalone provider created',
+        error: 'standalone provider creating failed',
+        key
       },
       async () => {
         return new VenomProvider(options);
@@ -239,7 +232,7 @@ const getStandaloneConnectionToVenomWallet = async (
 
     log({
       key,
-      value: "standalone end",
+      value: 'standalone end'
     });
 
     return venomProvider;
@@ -250,11 +243,11 @@ const getStandaloneConnectionToVenomWallet = async (
 
 const goByQRCode = () => {
   try {
-    const key = getKey("qr");
+    const key = getKey('qr');
 
     log({
       key,
-      value: "work in progress",
+      value: 'work in progress'
     });
 
     return undefined as any;
@@ -263,11 +256,11 @@ const goByQRCode = () => {
 
 const goByDeepLinkIOS = () => {
   try {
-    const key = getKey("ios");
+    const key = getKey('ios');
 
     log({
       key,
-      value: "work in progress",
+      value: 'work in progress'
     });
 
     return undefined as any;
@@ -276,11 +269,11 @@ const goByDeepLinkIOS = () => {
 
 const goByDeepLinkAndroid = () => {
   try {
-    const key = getKey("android");
+    const key = getKey('android');
 
     log({
       key,
-      value: "work in progress",
+      value: 'work in progress'
     });
 
     return undefined as any;
@@ -291,17 +284,17 @@ const venomWallet = {
   extension: {
     connector: connectToVenomWallet,
     authChecker: checkVenomWalletAuth,
-    standalone: getStandaloneConnectionToVenomWallet,
+    standalone: getStandaloneConnectionToVenomWallet
   },
   mobile: {
-    connector: goByQRCode,
+    connector: goByQRCode
   },
   ios: {
-    connector: goByDeepLinkIOS,
+    connector: goByDeepLinkIOS
   },
   android: {
-    connector: goByDeepLinkAndroid,
-  },
+    connector: goByDeepLinkAndroid
+  }
 };
 
 export default venomWallet;

@@ -1,33 +1,21 @@
-import { useEffect, useState } from "react";
-import { browserName, isIOS, isMobile } from "react-device-detect";
-import { checkIsCurrentBrowser } from "../helpers/utils";
-import { ProviderCard, ProviderCardProps } from "./ProviderCard";
+import { useEffect, useState } from 'react';
+import { browserName, isIOS, isMobile } from 'react-device-detect';
+import { checkIsCurrentBrowser } from '../helpers/utils';
+import { ProviderCard, ProviderCardProps } from './ProviderCard';
 
 type CardManagerProps = Omit<
   ProviderCardProps,
-  "isProviderExist" | "isCurrentBrowser" | "browser"
+  'isProviderExist' | 'isCurrentBrowser' | 'browser'
 >;
 export const CardManager = (props: CardManagerProps) => {
-  const {
-    connectorType,
-    options,
-    isBadBrowser,
-    allBrowsersNames,
-    browsersNames,
-  } = props;
+  const { connectorType, options, isBadBrowser, allBrowsersNames, browsersNames } = props;
   const [isProviderExist, setIsProviderExist] = useState<boolean | undefined>();
-  const [isCurrentBrowser, setIsCurrentBrowser] = useState<
-    boolean | undefined
-  >();
+  const [isCurrentBrowser, setIsCurrentBrowser] = useState<boolean | undefined>();
 
   const checking = async () => {
-    const { isCurrentBrowser } = checkIsCurrentBrowser(
-      options?.isCurrentBrowser
-    );
+    const { isCurrentBrowser } = checkIsCurrentBrowser(options?.isCurrentBrowser);
 
-    const result = isCurrentBrowser
-      ? await options?.["checkIsProviderExist"]?.()
-      : false;
+    const result = isCurrentBrowser ? await options?.['checkIsProviderExist']?.() : false;
 
     setIsCurrentBrowser(isCurrentBrowser);
     setIsProviderExist(result);
@@ -40,10 +28,10 @@ export const CardManager = (props: CardManagerProps) => {
 
   // вывод списка под разные платформы
   if (connectorType) {
-    if (options?.["hide"]) return null; // hide card if option
+    if (options?.['hide']) return null; // hide card if option
     if (isMobile) {
       if (isIOS) {
-        return connectorType === "ios" ? (
+        return connectorType === 'ios' ? (
           <ProviderCard
             {...props}
             isCurrentBrowser={true}
@@ -52,7 +40,7 @@ export const CardManager = (props: CardManagerProps) => {
           />
         ) : null;
       } else {
-        return connectorType === "android" ? (
+        return connectorType === 'android' ? (
           <ProviderCard
             {...props}
             isCurrentBrowser={true}
@@ -62,17 +50,11 @@ export const CardManager = (props: CardManagerProps) => {
         ) : null;
       }
     } else {
-      if (connectorType === "mobile") {
-        return (
-          <ProviderCard
-            {...props}
-            isCurrentBrowser={true}
-            isProviderExist={true}
-          />
-        );
+      if (connectorType === 'mobile') {
+        return <ProviderCard {...props} isCurrentBrowser={true} isProviderExist={true} />;
       }
 
-      if (connectorType === "extension") {
+      if (connectorType === 'extension') {
         if (isCurrentBrowser) {
           if (isProviderExist === undefined) return <>...</>;
           return (
@@ -103,7 +85,5 @@ export const CardManager = (props: CardManagerProps) => {
     return null;
   }
 
-  return (
-    <ProviderCard {...props} isCurrentBrowser={true} isProviderExist={true} />
-  );
+  return <ProviderCard {...props} isCurrentBrowser={true} isProviderExist={true} />;
 };

@@ -1,4 +1,4 @@
-import { EventCallback } from "../types";
+import { EventCallback } from '../types';
 
 export class EventController {
   private _eventCallbacks: EventCallback[];
@@ -23,8 +23,7 @@ export class EventController {
       } // No callback to remove, remove entire event
       else {
         this._eventCallbacks = this._eventCallbacks.filter(
-          (eventCallback: EventCallback) =>
-            eventCallback.event !== eventObj.event
+          (eventCallback: EventCallback) => eventCallback.event !== eventObj.event
         );
       }
     } else {

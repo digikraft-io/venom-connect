@@ -1,12 +1,12 @@
-import * as deviceDetect from "react-device-detect";
+import * as deviceDetect from 'react-device-detect';
 
 type Logger = {
-  type?: "error" | "log";
+  type?: 'error' | 'log';
   key?: string;
   value?: string;
 };
-export const log = ({ type = "log", key, value }: Logger) => {
-  return console[type]?.(`${key ? key + ": " : ""}${value}`);
+export const log = ({ type = 'log', key, value }: Logger) => {
+  return console[type]?.(`${key ? key + ': ' : ''}${value}`);
 };
 
 export const getKey = (name: string, type: string) => `${name}/${type}`;
@@ -22,15 +22,12 @@ type MakeMove = {
   };
   cb: () => Promise<any> | void;
 };
-export const makeMove = async (
-  logger: MakeMove["logger"],
-  cb: MakeMove["cb"]
-) => {
+export const makeMove = async (logger: MakeMove['logger'], cb: MakeMove['cb']) => {
   try {
     if (!disableLogs)
       log({
         key: logger.key,
-        value: logger.before,
+        value: logger.before
       });
 
     const response = await cb();
@@ -38,15 +35,15 @@ export const makeMove = async (
     if (!disableLogs)
       log({
         key: logger.key,
-        value: logger.after,
+        value: logger.after
       });
     return response;
   } catch (error: any) {
     if (!disableLogs)
       log({
-        type: "error",
+        type: 'error',
         key: logger.key,
-        value: logger.error,
+        value: logger.error
       });
     throw error;
   }
@@ -79,8 +76,7 @@ export const checkIsCurrentBrowser = (isCurrentBrowser?: any) => {
             if (deviceDetect[itemInner] === undefined) {
               return (
                 rInner &&
-                deviceDetect.engineName?.toLocaleLowerCase() ===
-                  itemInner?.toLocaleLowerCase()
+                deviceDetect.engineName?.toLocaleLowerCase() === itemInner?.toLocaleLowerCase()
               );
             }
             // @ts-ignore
@@ -98,6 +94,6 @@ export const checkIsCurrentBrowser = (isCurrentBrowser?: any) => {
   }
 
   return {
-    isCurrentBrowser: !!_isCurrentBrowser,
+    isCurrentBrowser: !!_isCurrentBrowser
   };
 };

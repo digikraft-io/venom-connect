@@ -1,52 +1,49 @@
-import { isIOS, isMobile } from "react-device-detect";
-import { createRoot, Root } from "react-dom/client";
-import { Modal } from "./components";
-import { getPromiseRaw, ProviderController } from "./controllers";
-import { EventController } from "./controllers/EventController";
-import {
-  ToggleExtensionWindow,
-  toggleExtensionWindow,
-} from "./helpers/backdrop";
+import { isIOS, isMobile } from 'react-device-detect';
+import { Root, createRoot } from 'react-dom/client';
+import { Modal } from './components';
+import { ProviderController, getPromiseRaw } from './controllers';
+import { EventController } from './controllers/EventController';
+import { ToggleExtensionWindow, toggleExtensionWindow } from './helpers/backdrop';
 import {
   CLOSE_EVENT,
   CONNECT_EVENT,
   ERROR_EVENT,
-  Events,
   EXTENSION_AUTH_EVENT,
   EXTENSION_WINDOW_CLOSED_EVENT,
-  SELECT_EVENT,
-} from "./helpers/events";
-import * as allProviders from "./providers";
-import { getThemeConfig, ThemeNameList, themesList } from "./themes";
+  Events,
+  SELECT_EVENT
+} from './helpers/events';
+import * as allProviders from './providers';
+import { getThemeConfig } from './themes';
 import {
   ProviderOptionsListWithOnClick,
   SimpleFunction,
   ThemeConfig,
   UserProvidersOptions,
-  VenomConnectOptions,
-} from "./types";
+  VenomConnectOptions
+} from './types';
 
-export const libName = "VenomConnect";
+export const libName = 'ValicitVenomConnect';
 
-export const VENOM_CONNECT_MODAL_ID = "VENOM_CONNECT_MODAL_ID";
+export const VENOM_CONNECT_MODAL_ID = 'VALICIT_VENOM_CONNECT_MODAL_ID';
 
 let oldRoot: Root | undefined = undefined;
 
 const _getDefaultVenomNetworkNameById = (networkId: number) => {
   switch (networkId) {
     case 0:
-      return "Venom Local Node";
+      return 'Venom Local Node';
     case 1000:
-      return "Venom Testnet";
+      return 'Venom Testnet';
     case 1:
     default:
-      return "Venom Mainnet";
+      return 'Venom Mainnet';
   }
 };
 
 const getDefaultVenomNetworkNameById = (networkId: number | number[]) => {
   if (Array.isArray(networkId)) {
-    const names = networkId.map((id) => {
+    const names = networkId.map(id => {
       return _getDefaultVenomNetworkNameById(id);
     });
 
@@ -57,11 +54,10 @@ const getDefaultVenomNetworkNameById = (networkId: number | number[]) => {
 };
 
 const defaultOptions: VenomConnectOptions = {
-  theme: themesList.default.name,
   providersOptions: {},
   checkNetworkId: 1,
-  checkNetworkName: "Venom Mainnet",
-  nTries: 0,
+  checkNetworkName: 'Venom Mainnet',
+  nTries: 0
 };
 class VenomConnect {
   private show: boolean = false;
@@ -78,15 +74,13 @@ class VenomConnect {
   // private pagePosition: number | null = null;
 
   constructor(options: {
-    theme?: VenomConnectOptions["theme"];
-    providersOptions: VenomConnectOptions["providersOptions"];
+    providersOptions: VenomConnectOptions['providersOptions'];
     checkNetworkId?: number | number[];
     checkNetworkName?: string;
     nTries?: number;
   }) {
-    console.log("VenomConnect.tsx: constructor", options);
-    const theme = options.theme || defaultOptions.theme;
-    this.themeConfig = getThemeConfig(theme);
+    console.log('VenomConnect.tsx: constructor', options);
+    this.themeConfig = getThemeConfig();
 
     const checkNetworkId =
       options.checkNetworkId === undefined
@@ -95,8 +89,7 @@ class VenomConnect {
     this.checkNetworkId = checkNetworkId;
 
     const checkNetworkName =
-      options.checkNetworkName ||
-      getDefaultVenomNetworkNameById(checkNetworkId);
+      options.checkNetworkName || getDefaultVenomNetworkNameById(checkNetworkId);
     this.checkNetworkName = checkNetworkName;
     VenomConnect.nTries = options.nTries || defaultOptions.nTries!;
 
@@ -104,20 +97,20 @@ class VenomConnect {
       providersOptions: Object.fromEntries(
         Object.entries(options.providersOptions)?.map(([key, value]) => {
           const defaultAnyProviderOptions:
-            | VenomConnectOptions["providersOptions"][0]
+            | VenomConnectOptions['providersOptions'][0]
             | undefined = defaultOptions.providersOptions?.[key];
 
           const defaultCurrentProviderOptions:
-            | VenomConnectOptions["providersOptions"][0]
+            | VenomConnectOptions['providersOptions'][0]
             // @ts-ignore
             | undefined = allProviders.providers?.[key];
 
           const defaultProviderOptions: any = {
             ...(defaultAnyProviderOptions || {}),
-            ...(defaultCurrentProviderOptions || {}),
+            ...(defaultCurrentProviderOptions || {})
           };
 
-          const providerOptions: UserProvidersOptions["x"] = {
+          const providerOptions: UserProvidersOptions['x'] = {
             // wallet: {
             //   ...{
             //     name: "your wallet",
@@ -130,34 +123,30 @@ class VenomConnect {
             // } as WalletDisplay,
             links: value.links,
             walletWaysToConnect: value.walletWaysToConnect?.length
-              ? value.walletWaysToConnect ||
-                defaultProviderOptions?.walletWaysToConnect ||
-                []
+              ? value.walletWaysToConnect || defaultProviderOptions?.walletWaysToConnect || []
               : defaultProviderOptions?.walletWaysToConnect,
-            defaultWalletWaysToConnect: value.defaultWalletWaysToConnect || [],
+            defaultWalletWaysToConnect: value.defaultWalletWaysToConnect || []
           };
 
           return [
             key,
             {
               ...defaultProviderOptions,
-              ...providerOptions,
-            },
+              ...providerOptions
+            }
           ];
         })
       ),
       checkNetworkId,
       checkNetworkName,
-      nTries: VenomConnect.nTries,
+      nTries: VenomConnect.nTries
     });
 
-    this.providerController.on(CONNECT_EVENT, (provider) =>
-      this.onConnect(provider)
-    );
-    this.providerController.on(ERROR_EVENT, (error) => this.onError(error));
+    this.providerController.on(CONNECT_EVENT, provider => this.onConnect(provider));
+    this.providerController.on(ERROR_EVENT, error => this.onError(error));
     this.providerController.on(SELECT_EVENT, this.onProviderSelect);
 
-    this.providerController.on(EXTENSION_AUTH_EVENT, (_provider) =>
+    this.providerController.on(EXTENSION_AUTH_EVENT, _provider =>
       this.eventController.trigger(EXTENSION_AUTH_EVENT, _provider)
     );
     this.providerController.on(EXTENSION_WINDOW_CLOSED_EVENT, () =>
@@ -180,9 +169,7 @@ class VenomConnect {
    *
    * static method (via window)
    */
-  public static async toggleExtensionWindow(
-    params: ToggleExtensionWindow
-  ): Promise<void> {
+  public static async toggleExtensionWindow(params: ToggleExtensionWindow): Promise<void> {
     await toggleExtensionWindow(params);
   }
 
@@ -198,12 +185,12 @@ class VenomConnect {
   public connect = (): Promise<any> =>
     new Promise(async (resolve, reject) => {
       this.updateState({
-        wrongNetwork: undefined,
+        wrongNetwork: undefined
       });
 
-      this.on(CONNECT_EVENT, (provider) => resolve(provider));
-      this.on(ERROR_EVENT, (error) => reject(error));
-      this.on(CLOSE_EVENT, () => reject("Pop-up closed"));
+      this.on(CONNECT_EVENT, provider => resolve(provider));
+      this.on(ERROR_EVENT, error => reject(error));
+      this.on(CLOSE_EVENT, () => reject('Pop-up closed'));
 
       const connectorIdList = Object.keys(allProviders.connectors);
       const authList = await this.checkAuth(connectorIdList);
@@ -211,19 +198,19 @@ class VenomConnect {
       if (!authList || !authList.length) {
         // проверяем что мобильный venom
         if (this.checkIsWalletBrowser().isVenomWalletBrowser) {
-          await this.connectTo("venomwallet", "extension");
+          await this.connectTo('venomwallet', 'extension');
 
           // проверяем что мобильный ever
         } else if (this.checkIsWalletBrowser().isEverWalletBrowser) {
-          await this.connectTo("everwallet", "extension");
+          await this.connectTo('everwallet', 'extension');
 
           // проверяем что мобильный oxychat
         } else if (this.checkIsWalletBrowser().isOxyWalletBrowser) {
-          await this.connectTo("oxychatwallet", "extension");
+          await this.connectTo('oxychatwallet', 'extension');
 
           // check OneArt
         } else if (this.checkIsWalletBrowser().isOneartWalletBrowser) {
-          await this.connectTo("oneartwallet", "extension");
+          await this.connectTo('oneartwallet', 'extension');
 
           // показываем обычный попап
         } else {
@@ -239,20 +226,16 @@ class VenomConnect {
    */
   public connectTo = (id: string, connectorId: string): Promise<any> =>
     new Promise(async (resolve, reject) => {
-      this.on(CONNECT_EVENT, (provider) => resolve(provider));
-      this.on(ERROR_EVENT, (error) => reject(error));
-      this.on(CLOSE_EVENT, () => reject("Pop-up closed"));
+      this.on(CONNECT_EVENT, provider => resolve(provider));
+      this.on(ERROR_EVENT, error => reject(error));
+      this.on(CLOSE_EVENT, () => reject('Pop-up closed'));
       const provider = this.providerController.getProvider(id);
       if (!provider) {
-        return reject(
-          new Error(
-            `Cannot connect to provider (${id}), check provider options`
-          )
-        );
+        return reject(new Error(`Cannot connect to provider (${id}), check provider options`));
       }
       const walletWayToConnect =
         provider.walletWaysToConnect.find(
-          (walletWayToConnect) => walletWayToConnect.id === connectorId
+          walletWayToConnect => walletWayToConnect.id === connectorId
         ) || provider.walletWaysToConnect[0];
 
       await this.providerController.connectTo(
@@ -280,20 +263,10 @@ class VenomConnect {
 
     return {
       show,
-      themeConfig,
+      themeConfig
       // options,
     };
   };
-
-  /**
-   * You can use this function to interactively switch themes in runtime.
-   */
-  public async updateTheme(
-    theme: ThemeNameList | ThemeConfig["theme"]
-  ): Promise<void> {
-    const themeConfig = getThemeConfig(theme);
-    await this.updateState({ themeConfig });
-  }
 
   /**
    * **Subscribing** to internal library events. `on(event, callback)`
@@ -303,13 +276,13 @@ class VenomConnect {
   public on(event: Events, callback: SimpleFunction): SimpleFunction {
     this.eventController.on({
       event,
-      callback,
+      callback
     });
 
     return () =>
       this.eventController.off({
         event,
-        callback,
+        callback
       });
   }
 
@@ -319,7 +292,7 @@ class VenomConnect {
   public off(event: Events, callback?: SimpleFunction): void {
     this.eventController.off({
       event,
-      callback,
+      callback
     });
   }
 
@@ -332,22 +305,18 @@ class VenomConnect {
     providerIdList: string[] | undefined = Object.keys(allProviders.providers)
   ) => {
     let fallback = undefined;
-    const providers = providerIdList?.map(async (id) => {
+    const providers = providerIdList?.map(async id => {
       const provider = this.providerController.getProvider(id);
 
       const promises = provider?.walletWaysToConnect
-        .filter(({ type }) => type === "extension")
+        .filter(({ type }) => type === 'extension')
         .map(async ({ authConnector, id: connectorId, type }) => {
           const provider =
             authConnector &&
-            (await this.providerController.getAuthTo(
-              id,
-              connectorId,
-              authConnector
-            ));
+            (await this.providerController.getAuthTo(id, connectorId, authConnector));
 
           if (!provider?.auth) {
-            if (id === "venomwallet") {
+            if (id === 'venomwallet') {
               fallback = provider?.fallback;
             }
             return null;
@@ -356,16 +325,16 @@ class VenomConnect {
           return {
             connectorId,
             connectorType: type,
-            provider: provider?.auth,
+            provider: provider?.auth
           };
         })
-        .filter((promise) => !!promise);
+        .filter(promise => !!promise);
 
       const providerList = promises && (await Promise.all(promises));
 
       return {
         id,
-        walletWaysToConnect: providerList?.filter((item) => !!item?.provider),
+        walletWaysToConnect: providerList?.filter(item => !!item?.provider)
       };
     });
 
@@ -377,8 +346,7 @@ class VenomConnect {
 
     const auth = filteredAuthList?.length ? filteredAuthList : false;
 
-    const authProvider =
-      (auth && auth?.[0]?.walletWaysToConnect?.[0]?.provider) || fallback;
+    const authProvider = (auth && auth?.[0]?.walletWaysToConnect?.[0]?.provider) || fallback;
 
     this.eventController.trigger(CONNECT_EVENT, authProvider);
 
@@ -388,7 +356,7 @@ class VenomConnect {
   /**
    * The function of getting a standalone provider by its ID. `getStandalone("venomwallet")` or `getStandalone()` By default, the ID is **venomwallet**.
    */
-  public getStandalone(walletId: string = "venomwallet") {
+  public getStandalone(walletId: string = 'venomwallet') {
     return this.providerController.getStandalone(walletId);
   }
 
@@ -404,10 +372,8 @@ class VenomConnect {
    *
    *  You can get the promise you need by wallet ID and connection type `getPromise("venomwallet", "extension")` or you can use the default connection type ("extension") `getPromise("venomwallet")`.
    */
-  public static getPromise = (
-    walletId: string,
-    type: string | undefined = "extension"
-  ) => getPromiseRaw(window, walletId, type, VenomConnect.nTries);
+  public static getPromise = (walletId: string, type: string | undefined = 'extension') =>
+    getPromiseRaw(window, walletId, type, VenomConnect.nTries);
 
   // --------------- PRIVATE METHODS --------------- //
 
@@ -416,24 +382,24 @@ class VenomConnect {
 
     const isVenomWalletBrowser = !!(
       navigator &&
-      navigator.userAgent.includes("VenomWalletBrowser") &&
-      !navigator.userAgent.includes("OneArtWalletBrowser") &&
-      ids.includes("venomwallet")
+      navigator.userAgent.includes('VenomWalletBrowser') &&
+      !navigator.userAgent.includes('OneArtWalletBrowser') &&
+      ids.includes('venomwallet')
     );
     const isEverWalletBrowser = !!(
       navigator &&
-      navigator.userAgent.includes("EverWalletBrowser") &&
-      ids.includes("everwallet")
+      navigator.userAgent.includes('EverWalletBrowser') &&
+      ids.includes('everwallet')
     );
     const isOxyWalletBrowser = !!(
       navigator &&
-      navigator.userAgent.includes("OxyWalletBrowser") &&
-      ids.includes("oxychatwallet")
+      navigator.userAgent.includes('OxyWalletBrowser') &&
+      ids.includes('oxychatwallet')
     );
     const isOneartWalletBrowser = !!(
       navigator &&
-      navigator.userAgent.includes("OneArtWalletBrowser") &&
-      ids.includes("oneartwallet")
+      navigator.userAgent.includes('OneArtWalletBrowser') &&
+      ids.includes('oneartwallet')
     );
     return {
       isVenomWalletBrowser,
@@ -441,7 +407,10 @@ class VenomConnect {
       isOxyWalletBrowser,
       isOneartWalletBrowser,
       isOneOfWalletBrowsers:
-        isVenomWalletBrowser || isEverWalletBrowser || isOxyWalletBrowser || isOneartWalletBrowser,
+        isVenomWalletBrowser ||
+        isEverWalletBrowser ||
+        isOxyWalletBrowser ||
+        isOneartWalletBrowser
     };
   };
 
@@ -455,22 +424,19 @@ class VenomConnect {
     const oldContainer = document.getElementById(VENOM_CONNECT_MODAL_ID);
 
     if (!oldContainer) {
-      const el = document.createElement("div");
+      const el = document.createElement('div');
       el.id = VENOM_CONNECT_MODAL_ID;
       document.body.appendChild(el);
     }
 
-    const container =
-      oldContainer || document.getElementById(VENOM_CONNECT_MODAL_ID);
+    const container = oldContainer || document.getElementById(VENOM_CONNECT_MODAL_ID);
 
     const root = oldRoot || (oldRoot = createRoot(container!));
 
-    let optionsIds: (string | null)[] = Array.from(
-      new Set(this.options.map(({ id }) => id))
-    );
+    let optionsIds: (string | null)[] = Array.from(new Set(this.options.map(({ id }) => id)));
 
     const filteredOptions = this.options.filter(({ id }) => {
-      const index = optionsIds.findIndex((optionsId) => optionsId === id);
+      const index = optionsIds.findIndex(optionsId => optionsId === id);
       if (~index) {
         optionsIds[index] = null;
         return true;
@@ -479,69 +445,61 @@ class VenomConnect {
       }
     });
 
-    const supportedOptions = filteredOptions.filter(
-      ({ walletWaysToConnect }) => {
-        const booleanArray = walletWaysToConnect.reduce((r, { type }) => {
-          let result: boolean;
-          if (isMobile) {
-            if (isIOS) {
-              result = type === "ios";
-            } else {
-              result = type === "android";
-            }
+    const supportedOptions = filteredOptions.filter(({ walletWaysToConnect }) => {
+      const booleanArray = walletWaysToConnect.reduce((r, { type }) => {
+        let result: boolean;
+        if (isMobile) {
+          if (isIOS) {
+            result = type === 'ios';
           } else {
-            result = type !== "ios" && type !== "android";
+            result = type === 'android';
           }
+        } else {
+          result = type !== 'ios' && type !== 'android';
+        }
 
-          r.push(result);
+        r.push(result);
 
-          return r;
-        }, [] as boolean[]);
+        return r;
+      }, [] as boolean[]);
 
-        return booleanArray.includes(true);
-      }
-    );
+      return booleanArray.includes(true);
+    });
 
-    const injectedLinkOptions = supportedOptions.map((supportedOption) => {
+    const injectedLinkOptions = supportedOptions.map(supportedOption => {
       return {
         ...supportedOption,
-        walletWaysToConnect: supportedOption.walletWaysToConnect.map(
-          (walletWayToConnect) => {
-            const installExtensionLinkRaw =
-              walletWayToConnect.options?.["installExtensionLink"];
-            const deepLinkRaw = walletWayToConnect.options?.["deepLink"];
-            const qrRaw = walletWayToConnect.options?.["qr"];
-            const devisesRaw = walletWayToConnect.options?.["devises"];
+        walletWaysToConnect: supportedOption.walletWaysToConnect.map(walletWayToConnect => {
+          const installExtensionLinkRaw = walletWayToConnect.options?.['installExtensionLink'];
+          const deepLinkRaw = walletWayToConnect.options?.['deepLink'];
+          const qrRaw = walletWayToConnect.options?.['qr'];
+          const devisesRaw = walletWayToConnect.options?.['devises'];
 
-            const links = supportedOption.links;
+          const links = supportedOption.links;
 
-            return {
-              ...walletWayToConnect,
-              options: {
-                ...walletWayToConnect.options,
-                installExtensionLink:
-                  typeof installExtensionLinkRaw === "function"
-                    ? installExtensionLinkRaw(links)
-                    : installExtensionLinkRaw,
-                deepLink:
-                  typeof deepLinkRaw === "function"
-                    ? deepLinkRaw(links)
-                    : deepLinkRaw,
-                qr: typeof qrRaw === "function" ? qrRaw(links) : qrRaw,
-                devises: devisesRaw?.map?.((devise: any) => {
-                  const deviseDeepLinkRaw = devise?.["deepLink"];
-                  return {
-                    ...devise,
-                    deepLink:
-                      typeof deviseDeepLinkRaw === "function"
-                        ? deviseDeepLinkRaw(links)
-                        : deviseDeepLinkRaw,
-                  };
-                }),
-              },
-            };
-          }
-        ),
+          return {
+            ...walletWayToConnect,
+            options: {
+              ...walletWayToConnect.options,
+              installExtensionLink:
+                typeof installExtensionLinkRaw === 'function'
+                  ? installExtensionLinkRaw(links)
+                  : installExtensionLinkRaw,
+              deepLink: typeof deepLinkRaw === 'function' ? deepLinkRaw(links) : deepLinkRaw,
+              qr: typeof qrRaw === 'function' ? qrRaw(links) : qrRaw,
+              devises: devisesRaw?.map?.((devise: any) => {
+                const deviseDeepLinkRaw = devise?.['deepLink'];
+                return {
+                  ...devise,
+                  deepLink:
+                    typeof deviseDeepLinkRaw === 'function'
+                      ? deviseDeepLinkRaw(links)
+                      : deviseDeepLinkRaw
+                };
+              })
+            }
+          };
+        })
       };
     });
 
@@ -613,7 +571,7 @@ class VenomConnect {
   };
 
   private updateState = async (state: any) => {
-    Object.keys(state).forEach((key) => {
+    Object.keys(state).forEach(key => {
       // @ts-ignore
       this[key] = state[key];
     });

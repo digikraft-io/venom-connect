@@ -7,6 +7,7 @@ export const MobileApp: JsxOrUndefined = () => {
     </svg>
   );
 };
+
 export const Apple: JsxOrUndefined = () => {
   return (
     <svg viewBox="0 0 20 24" xmlns="http://www.w3.org/2000/svg">
@@ -15,4 +16,5 @@ export const Apple: JsxOrUndefined = () => {
     </svg>
   );
 };
+
 export const Android: JsxOrUndefined = undefined as unknown as JsxOrUndefined;

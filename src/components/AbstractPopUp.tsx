@@ -1,29 +1,30 @@
-import { rgba } from "polished";
-import { useEffect, useState } from "react";
-import { isDesktop } from "react-device-detect";
-import styled from "styled-components";
-import { SimpleFunction, Theme, ThemeConfig } from "../types";
-import { CloseCross } from "./CloseCross";
+import { rgba } from 'polished';
+import { useEffect, useState } from 'react';
+import { isDesktop } from 'react-device-detect';
+import styled from 'styled-components';
+import { SimpleFunction, Theme, ThemeConfig } from '../types';
+import { CloseCross } from './CloseCross';
 
 export const SECONDS: number = 0.25;
 
 type BackdropStyleProps = {
   show: boolean;
   visible: boolean;
-  backdrop: Theme["common"]["backdrop"];
-  popup: Theme["popup"];
+  backdrop: Theme['common']['backdrop'];
+  popup: Theme['popup'];
 };
+
 const SBackdrop = styled.div<BackdropStyleProps>`
   transition: all ${SECONDS / 2}s ease-in-out;
 
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-style: normal;
   font-weight: 400;
   color: ${({
     popup: {
-      text: { color },
-    },
+      text: { color }
+    }
   }) => color};
 
   cursor: default;
@@ -44,14 +45,14 @@ const SBackdrop = styled.div<BackdropStyleProps>`
 
   /* ========================= */
   opacity: ${({ show }) => (show ? 1 : 0)};
-  visibility: ${({ visible }) => (visible ? "visible" : "hidden")};
-  pointer-events: ${({ visible }) => (visible ? "auto" : "none")};
+  visibility: ${({ visible }) => (visible ? 'visible' : 'hidden')};
+  pointer-events: ${({ visible }) => (visible ? 'auto' : 'none')};
 
   top: ${({ backdrop: { offset } }) =>
-    typeof offset === "string" ? offset : `-${offset || 0}px`};
+    typeof offset === 'string' ? offset : `-${offset || 0}px`};
   background: ${({ backdrop: { color, opacity } }) => {
     let alpha = 0.4;
-    if (typeof opacity === "number") {
+    if (typeof opacity === 'number') {
       alpha = opacity;
     }
     return rgba(color, alpha);
@@ -68,6 +69,7 @@ type ModalContainerStyleProps = {
   show: boolean;
   visible: boolean;
 };
+
 const SModalContainer = styled.div<ModalContainerStyleProps>`
   transition: all ${SECONDS}s ease-in-out;
 
@@ -83,8 +85,8 @@ const SModalContainer = styled.div<ModalContainerStyleProps>`
 
   /* ========================= */
   opacity: ${({ show }) => (show ? 1 : 0)};
-  visibility: ${({ visible }) => (visible ? "visible" : "hidden")};
-  pointer-events: ${({ visible }) => (visible ? "auto" : "none")};
+  visibility: ${({ visible }) => (visible ? 'visible' : 'hidden')};
+  pointer-events: ${({ visible }) => (visible ? 'auto' : 'none')};
   /* ========================= */
 `;
 
@@ -100,8 +102,9 @@ type ModalCardWrapperStyleProps = {
   show: boolean;
   visible: boolean;
   maxWidth?: number;
-  border: Theme["popup"]["border"];
+  border: Theme['popup']['border'];
 };
+
 const SModalCardWrapper = styled.div<ModalCardWrapperStyleProps>`
   transition: all ${SECONDS}s ease-in-out;
 
@@ -117,20 +120,21 @@ const SModalCardWrapper = styled.div<ModalCardWrapperStyleProps>`
 
   /* ========================= */
   opacity: ${({ show }) => (show ? 1 : 0)};
-  visibility: ${({ visible }) => (visible ? "visible" : "hidden")};
-  pointer-events: ${({ visible }) => (visible ? "auto" : "none")};
+  visibility: ${({ visible }) => (visible ? 'visible' : 'hidden')};
+  pointer-events: ${({ visible }) => (visible ? 'auto' : 'none')};
 
-  max-width: ${({ maxWidth }) => (maxWidth ? `${maxWidth}px` : "400px")};
+  max-width: ${({ maxWidth }) => (maxWidth ? `${maxWidth}px` : '400px')};
   padding: ${({ border: { width } }) => `${width}px`};
   background: ${({ border: { color } }) => color};
   border-radius: ${({ border: { borderRadius } }) =>
-    typeof borderRadius === "string" ? borderRadius : `${borderRadius}px`};
+    typeof borderRadius === 'string' ? borderRadius : `${borderRadius}px`};
   /* ========================= */
 `;
 
 type ModalCardStyleProps = {
-  popup: ThemeConfig["theme"]["popup"];
+  popup: ThemeConfig['theme']['popup'];
 };
+
 const SModalCard = styled.div<ModalCardStyleProps>`
   position: relative;
 
@@ -149,25 +153,24 @@ const SModalCard = styled.div<ModalCardStyleProps>`
   padding: 28px
     ${({
       popup: {
-        border: { width },
-      },
+        border: { width }
+      }
     }) => `${40 - width}px`};
   background: ${({
     popup: {
-      background: { color },
-    },
+      background: { color }
+    }
   }) => color};
   backdrop-filter: ${({
     popup: {
-      background: { backdropFilter },
-    },
+      background: { backdropFilter }
+    }
   }) => backdropFilter};
   border-radius: ${({
     popup: {
-      border: { borderRadius },
-    },
-  }) =>
-    typeof borderRadius === "string" ? borderRadius : `${borderRadius - 1}px`};
+      border: { borderRadius }
+    }
+  }) => (typeof borderRadius === 'string' ? borderRadius : `${borderRadius - 1}px`)};
   /* ========================= */
 
   background-position: center;
@@ -178,6 +181,7 @@ type CardHeader = {
   fontWeight?: string | number;
   lineHeight?: string | number;
 };
+
 const SCardHeader = styled.div<CardHeader>`
   width: 100%;
 
@@ -188,30 +192,31 @@ const SCardHeader = styled.div<CardHeader>`
 
   font-weight: ${({ fontWeight }) => fontWeight || 600};
   font-size: ${({ fontSize }) =>
-    (typeof fontSize === "number" ? `${fontSize}px` : fontSize) || "24px"};
+    (typeof fontSize === 'number' ? `${fontSize}px` : fontSize) || '24px'};
   line-height: ${({ lineHeight }) =>
-    (typeof lineHeight === "number" ? `${lineHeight}px` : lineHeight) ||
-    "28px"};
+    (typeof lineHeight === 'number' ? `${lineHeight}px` : lineHeight) || '28px'};
 `;
 
 type TextAlign = {
   textAlign?: string;
 };
+
 const STextAlign = styled.div<TextAlign>`
   width: 100%;
-  text-align: ${({ textAlign }) => `${textAlign || "center"}`};
+  text-align: ${({ textAlign }) => `${textAlign || 'center'}`};
 `;
 
 type ScrollSection = {
   color: string;
   isDesktop: boolean;
 };
+
 const SScrollSection = styled.div<ScrollSection>`
   max-width: 364px;
 
   height: 100%;
   max-height: ${({ isDesktop }) =>
-    `${isDesktop ? "min(calc(100vh - 210px), 360px)" : "100vh"}`};
+    `${isDesktop ? 'min(calc(100vh - 210px), 360px)' : '100vh'}`};
 
   padding: 0 22px;
   margin: 0 -22px;
@@ -240,13 +245,14 @@ const SScrollSection = styled.div<ScrollSection>`
 type Children = {
   animation?: boolean;
 };
+
 const SChildren = styled.div<Children>`
   width: 100%;
   margin-top: 10px;
   opacity: ${({ animation }) => (animation ? 1 : 0)};
 
   animation-duration: ${SECONDS}s;
-  animation-name: ${({ animation }) => (animation ? "children" : "")};
+  animation-name: ${({ animation }) => (animation ? 'children' : '')};
 
   @keyframes children {
     from {
@@ -258,9 +264,11 @@ const SChildren = styled.div<Children>`
     }
   }
 `;
+
 type Badge = {
   color: string;
 };
+
 const SBadge = styled.div<Badge>`
   width: 100%;
   margin-top: 24px;
@@ -279,11 +287,11 @@ type AbstractPopUpProps = {
   pause?: SimpleFunction;
   goBack?: SimpleFunction;
   onClose?: SimpleFunction;
-  themeObject: ThemeConfig["theme"];
+  themeObject: ThemeConfig['theme'];
   cardHeader: {
     text: string | JSX.Element;
     fontSize?: number | string;
-    textAlign?: "left" | "right" | "center";
+    textAlign?: 'left' | 'right' | 'center';
   };
   children?: JSX.Element;
 };
@@ -295,7 +303,7 @@ const AbstractPopUp = ({
   onClose,
   themeObject,
   cardHeader,
-  children,
+  children
 }: AbstractPopUpProps) => {
   const [show, setShow] = useState(false);
 
@@ -308,9 +316,7 @@ const AbstractPopUp = ({
       setShow(outerShow);
     };
 
-    const id = outerShow
-      ? undefined
-      : setTimeout(setShowWrapper, SECONDS * 1000);
+    const id = outerShow ? undefined : setTimeout(setShowWrapper, SECONDS * 1000);
 
     return () => {
       clearTimeout(id);
@@ -340,7 +346,7 @@ const AbstractPopUp = ({
 
   useEffect(() => {
     const fn = () => {
-      setKey(cardHeader.text || "");
+      setKey(cardHeader.text || '');
     };
 
     const id = setTimeout(fn, 1);
@@ -368,19 +374,13 @@ const AbstractPopUp = ({
             })
           }
         />
-        <SModalCardWrapper
-          show={show}
-          visible={outerShow}
-          border={themeObject.popup.border}
-        >
+        <SModalCardWrapper show={show} visible={outerShow} border={themeObject.popup.border}>
           <SModalCard popup={themeObject.popup}>
             <SCardHeader
               fontSize={cardHeader.fontSize}
               fontWeight={themeObject.popup.title?.fontWeight}
             >
-              <STextAlign textAlign={cardHeader.textAlign}>
-                {cardHeader.text}
-              </STextAlign>
+              <STextAlign textAlign={cardHeader.textAlign}>{cardHeader.text}</STextAlign>
               {!!onClose && (
                 <CloseCross
                   color={themeObject.popup.closeCross.color}
@@ -390,14 +390,11 @@ const AbstractPopUp = ({
               )}
             </SCardHeader>
             <SChildren animation={key === cardHeader.text}>
-              <SScrollSection
-                color={themeObject.popup.scroll.color}
-                isDesktop={isDesktop}
-              >
+              <SScrollSection color={themeObject.popup.scroll.color} isDesktop={isDesktop}>
                 {children}
               </SScrollSection>
-              <SBadge color={themeObject.popup.badgeColor}>
-                powered by{" "}
+              {/* <SBadge color={themeObject.popup.badgeColor}>
+                powered by{' '}
                 <a
                   href="https://web3.space/venom-connect"
                   target="_blank"
@@ -405,7 +402,7 @@ const AbstractPopUp = ({
                 >
                   <b>web3.space</b>
                 </a>
-              </SBadge>
+              </SBadge> */}
             </SChildren>
           </SModalCard>
         </SModalCardWrapper>

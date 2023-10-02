@@ -1,4 +1,3 @@
-import { VenomConnect } from "./VenomConnect";
+import { VenomConnect } from './VenomConnect';
 
-export { VenomConnect };
-export { VenomConnect as default };
+export { VenomConnect, VenomConnect as default };

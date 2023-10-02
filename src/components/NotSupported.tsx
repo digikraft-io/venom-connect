@@ -1,14 +1,14 @@
-import styled from "styled-components";
-import { Theme } from "../types";
+import styled from 'styled-components';
+import { Theme } from '../types';
 
 type Badge = {
-  item: Theme["item"];
+  item: Theme['item'];
   isVisualHide: boolean;
 };
 const SBadge = styled.div<Badge>`
   opacity: ${({ isVisualHide }) => (isVisualHide ? 0 : 1)};
 
-  max-height: ${({ isVisualHide }) => (isVisualHide ? "20px" : "none")};
+  max-height: ${({ isVisualHide }) => (isVisualHide ? '20px' : 'none')};
   width: 100%;
   margin: 8px 0;
   padding: 4px 6px;
@@ -18,9 +18,9 @@ const SBadge = styled.div<Badge>`
   background: ${({
     item: {
       warning: {
-        background: { color },
-      },
-    },
+        background: { color }
+      }
+    }
   }) => color};
   border-radius: 4px;
 
@@ -30,20 +30,20 @@ const SBadge = styled.div<Badge>`
   color: ${({
     item: {
       warning: {
-        text: { color },
-      },
-    },
+        text: { color }
+      }
+    }
   }) => color};
 `;
 
 export enum Browsers {
-  isChrome = "Google Chrome",
-  isFirefox = "Mozilla Firefox",
+  isChrome = 'Google Chrome',
+  isFirefox = 'Mozilla Firefox'
 }
 
 export const filterNameArr = (nameArr: string[]) => {
   // @ts-ignore
-  return nameArr?.map((n) => Browsers[n] || null)?.filter((n) => !!n);
+  return nameArr?.map(n => Browsers[n] || null)?.filter(n => !!n);
 };
 
 type BrowserBadgeProps = {
@@ -51,11 +51,7 @@ type BrowserBadgeProps = {
   themeObject: Theme;
   isVisualHide?: boolean;
 };
-const BrowserBadge = ({
-  browserName,
-  themeObject,
-  isVisualHide,
-}: BrowserBadgeProps) => {
+const BrowserBadge = ({ browserName, themeObject, isVisualHide }: BrowserBadgeProps) => {
   return (
     <SBadge item={themeObject.item} isVisualHide={!!isVisualHide}>
       Your browser is not supported now.
@@ -68,20 +64,15 @@ const BrowserBadge = ({
 type BrowserTextProps = {
   browserName: Browsers | string;
 };
-const BrowserText = ({ browserName }: BrowserTextProps) => (
-  browserName ? <>You need to install {browserName} browser</> : <></>
-);
+const BrowserText = ({ browserName }: BrowserTextProps) =>
+  browserName ? <>You need to install {browserName} browser</> : <></>;
 
 type ProviderBadgeProps = {
   providerName: Browsers | string;
   themeObject: Theme;
   isVisualHide?: boolean;
 };
-const ProviderBadge = ({
-  providerName,
-  themeObject,
-  isVisualHide,
-}: ProviderBadgeProps) => {
+const ProviderBadge = ({ providerName, themeObject, isVisualHide }: ProviderBadgeProps) => {
   return (
     <SBadge item={themeObject.item} isVisualHide={!!isVisualHide}>
       Your wallet is not supported now.
@@ -101,10 +92,10 @@ const ProviderText = ({ providerName }: ProviderTextProps) => (
 export const notSupported = {
   browser: {
     Badge: BrowserBadge,
-    Text: BrowserText,
+    Text: BrowserText
   },
   provider: {
     Badge: ProviderBadge,
-    Text: ProviderText,
-  },
+    Text: ProviderText
+  }
 };

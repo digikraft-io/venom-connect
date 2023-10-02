@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { ThemeConfig } from "../types";
+import styled from 'styled-components';
+import { ThemeConfig } from '../types';
 
 type Color = {
   color: string;
@@ -20,7 +20,7 @@ const ShowNetwork = styled.div<Color>`
   justify-content: center;
 
   border-radius: 8px;
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 500;
   font-size: 20px;
@@ -40,7 +40,7 @@ const ChangeWalletButton = styled.div`
   align-items: center;
   justify-content: center;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -48,7 +48,7 @@ const ChangeWalletButton = styled.div`
 `;
 
 type TextDivType = {
-  textAlign?: "center" | "left";
+  textAlign?: 'center' | 'left';
 };
 const TextDiv = styled.div<TextDivType>`
   font-size: 12px;
@@ -56,10 +56,10 @@ const TextDiv = styled.div<TextDivType>`
   width: 100%;
 
   margin: 12px 0;
-  text-align: ${({ textAlign }) => textAlign || "center"};
+  text-align: ${({ textAlign }) => textAlign || 'center'};
 `;
 export type WrongNetworkPopupProps = {
-  textColor: ThemeConfig["theme"]["common"]["text"]["color"];
+  textColor: ThemeConfig['theme']['common']['text']['color'];
   networkName: string;
   changeWallet: () => void;
   disconnect?: () => void;
@@ -68,23 +68,19 @@ export const WrongNetworkPopup = ({
   textColor,
   networkName,
   changeWallet,
-  disconnect,
+  disconnect
 }: WrongNetworkPopupProps) => {
   return (
     <>
       <ShowNetworkWrapper>
-        <TextDiv textAlign="center">
-          Please change network in your wallets settings to
-        </TextDiv>
+        <TextDiv textAlign="center">Please change network in your wallets settings to</TextDiv>
         <ShowNetwork color={textColor}>{networkName}</ShowNetwork>
       </ShowNetworkWrapper>
       <TextDiv textAlign="center">or</TextDiv>
       {disconnect ? (
         <ChangeWalletButton onClick={disconnect}>Disconnect</ChangeWalletButton>
       ) : (
-        <ChangeWalletButton onClick={changeWallet}>
-          Change Wallet
-        </ChangeWalletButton>
+        <ChangeWalletButton onClick={changeWallet}>Change Wallet</ChangeWalletButton>
       )}
     </>
   );

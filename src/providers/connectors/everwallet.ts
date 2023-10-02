@@ -1,10 +1,10 @@
-import { toggleExtensionWindow } from "../../helpers/backdrop";
-import { getKey as getKeyRaw, log, makeMove } from "../../helpers/utils";
-import { Callbacks } from "../../types";
-import { setupNetworkIdTimer } from "./networkIdTimerUtil";
+import { toggleExtensionWindow } from '../../helpers/backdrop';
+import { getKey as getKeyRaw, log, makeMove } from '../../helpers/utils';
+import { Callbacks } from '../../types';
+import { setupNetworkIdTimer } from './networkIdTimerUtil';
 
 // checked for version "everscale-inpage-provider": "^0.3.28",
-export const everWalletName = "Ever Wallet";
+export const everWalletName = 'Ever Wallet';
 
 const getKey = (type: string) => getKeyRaw(everWalletName, type);
 
@@ -17,9 +17,9 @@ export const checkIsProviderExist = async (everProvider: any) => {
 
     if (!isExist) {
       log({
-        type: "error",
+        type: 'error',
         key: everWalletName,
-        value: "Extension is not installed",
+        value: 'Extension is not installed'
       });
     }
 
@@ -35,19 +35,19 @@ export const checkIsProviderExist = async (everProvider: any) => {
  */
 const checkEverWalletAuth = async (EverProvider: any, options: any) => {
   try {
-    const key = getKey("extension/auth");
+    const key = getKey('extension/auth');
 
     log({
       key,
-      value: "check auth start",
+      value: 'check auth start'
     });
 
     const everProvider = await makeMove(
       {
-        before: "provider creating",
-        after: "provider created",
-        error: "provider creating failed",
-        key,
+        before: 'provider creating',
+        after: 'provider created',
+        error: 'provider creating failed',
+        key
       },
       async () => {
         return new EverProvider(options);
@@ -56,10 +56,10 @@ const checkEverWalletAuth = async (EverProvider: any, options: any) => {
 
     await makeMove(
       {
-        before: "injected provider checking",
-        after: "provider injected",
-        error: "injected provider checking failed",
-        key,
+        before: 'injected provider checking',
+        after: 'provider injected',
+        error: 'injected provider checking failed',
+        key
       },
       async () => {
         const isExist = checkIsProviderExist(everProvider);
@@ -70,10 +70,10 @@ const checkEverWalletAuth = async (EverProvider: any, options: any) => {
 
     const auth = await makeMove(
       {
-        before: "auth checking",
-        after: "auth checked",
-        error: "auth checking failed",
-        key,
+        before: 'auth checking',
+        after: 'auth checked',
+        error: 'auth checking failed',
+        key
       },
       async () => {
         const getProviderState = await everProvider?.getProviderState?.();
@@ -90,12 +90,12 @@ const checkEverWalletAuth = async (EverProvider: any, options: any) => {
 
     log({
       key,
-      value: "check auth end",
+      value: 'check auth end'
     });
 
     return {
       auth,
-      fallback: everProvider,
+      fallback: everProvider
     };
   } catch (error) {
     // console.error(error);
@@ -107,25 +107,21 @@ const checkEverWalletAuth = async (EverProvider: any, options: any) => {
  * options: any | undefined
  * callbacks: Callbacks
  */
-const connectToEverWallet = async (
-  EverProvider: any,
-  options: any,
-  callbacks: Callbacks
-) => {
+const connectToEverWallet = async (EverProvider: any, options: any, callbacks: Callbacks) => {
   try {
-    const key = getKey("extension");
+    const key = getKey('extension');
 
     log({
       key,
-      value: "connection start",
+      value: 'connection start'
     });
 
     const everProvider = await makeMove(
       {
-        before: "provider creating",
-        after: "provider created",
-        error: "provider creating failed",
-        key,
+        before: 'provider creating',
+        after: 'provider created',
+        error: 'provider creating failed',
+        key
       },
       async () => {
         return new EverProvider(options);
@@ -134,10 +130,10 @@ const connectToEverWallet = async (
 
     await makeMove(
       {
-        before: "injected provider checking",
-        after: "provider injected",
-        error: "injected provider checking failed",
-        key,
+        before: 'injected provider checking',
+        after: 'provider injected',
+        error: 'injected provider checking failed',
+        key
       },
       async () => {
         const isExist = checkIsProviderExist(everProvider);
@@ -146,33 +142,29 @@ const connectToEverWallet = async (
       }
     );
 
-    const permissions = ["basic", "accountInteraction"];
+    const permissions = ['basic', 'accountInteraction'];
 
     await toggleExtensionWindow({
-      isExtensionWindowOpen: true,
+      isExtensionWindowOpen: true
     });
 
     await makeMove(
       {
-        before: `permissions requesting (${permissions.join(", ")})`,
-        after: "permissions requested",
-        error: "permissions requesting failed",
-        key,
+        before: `permissions requesting (${permissions.join(', ')})`,
+        after: 'permissions requested',
+        error: 'permissions requesting failed',
+        key
       },
       async () => {
         const { accountInteraction } = await everProvider?.requestPermissions({
-          permissions,
+          permissions
         });
 
         if (accountInteraction == null) {
-          throw new Error("Insufficient permissions");
+          throw new Error('Insufficient permissions');
         }
 
-        setupNetworkIdTimer(
-          accountInteraction.address,
-          everProvider,
-          options.checkNetworkId
-        );
+        setupNetworkIdTimer(accountInteraction.address, everProvider, options.checkNetworkId);
 
         return accountInteraction;
       }
@@ -180,19 +172,19 @@ const connectToEverWallet = async (
 
     log({
       key,
-      value: "connection end",
+      value: 'connection end'
     });
 
     callbacks.authorizationCompleted(everProvider);
 
     await toggleExtensionWindow({
-      isExtensionWindowOpen: false,
+      isExtensionWindowOpen: false
     });
 
     return everProvider;
   } catch (error: any) {
     let emessage;
-    if (typeof error === "object") {
+    if (typeof error === 'object') {
       if (error.message) {
         emessage = error.message; // get the error message
       } else {
@@ -204,7 +196,7 @@ const connectToEverWallet = async (
     callbacks.extensionWindowError(emessage);
   } finally {
     await toggleExtensionWindow({
-      isExtensionWindowOpen: false,
+      isExtensionWindowOpen: false
     });
   }
 };
@@ -213,24 +205,21 @@ const connectToEverWallet = async (
  * everProvider: ProviderRpcClient,
  * options: any | undefined
  */
-const getStandaloneConnectionToEverWallet = async (
-  EverProvider: any,
-  options: any
-) => {
+const getStandaloneConnectionToEverWallet = async (EverProvider: any, options: any) => {
   try {
-    const key = getKey("extension");
+    const key = getKey('extension');
 
     log({
       key,
-      value: "standalone start",
+      value: 'standalone start'
     });
 
     const everProvider = await makeMove(
       {
-        before: "standalone provider creating",
-        after: "standalone provider created",
-        error: "standalone provider creating failed",
-        key,
+        before: 'standalone provider creating',
+        after: 'standalone provider created',
+        error: 'standalone provider creating failed',
+        key
       },
       async () => {
         return new EverProvider(options);
@@ -239,7 +228,7 @@ const getStandaloneConnectionToEverWallet = async (
 
     log({
       key,
-      value: "standalone end",
+      value: 'standalone end'
     });
 
     return everProvider;
@@ -250,11 +239,11 @@ const getStandaloneConnectionToEverWallet = async (
 
 const goByQRCode = () => {
   try {
-    const key = getKey("qr");
+    const key = getKey('qr');
 
     log({
       key,
-      value: "work in progress",
+      value: 'work in progress'
     });
 
     return undefined as any;
@@ -263,11 +252,11 @@ const goByQRCode = () => {
 
 const goByDeepLinkIOS = () => {
   try {
-    const key = getKey("ios");
+    const key = getKey('ios');
 
     log({
       key,
-      value: "work in progress",
+      value: 'work in progress'
     });
 
     return undefined as any;
@@ -276,11 +265,11 @@ const goByDeepLinkIOS = () => {
 
 const goByDeepLinkAndroid = () => {
   try {
-    const key = getKey("android");
+    const key = getKey('android');
 
     log({
       key,
-      value: "work in progress",
+      value: 'work in progress'
     });
 
     return undefined as any;
@@ -291,17 +280,17 @@ const everWallet = {
   extension: {
     connector: connectToEverWallet,
     authChecker: checkEverWalletAuth,
-    standalone: getStandaloneConnectionToEverWallet,
+    standalone: getStandaloneConnectionToEverWallet
   },
   mobile: {
-    connector: goByQRCode,
+    connector: goByQRCode
   },
   ios: {
-    connector: goByDeepLinkIOS,
+    connector: goByDeepLinkIOS
   },
   android: {
-    connector: goByDeepLinkAndroid,
-  },
+    connector: goByDeepLinkAndroid
+  }
 };
 
 export default everWallet;

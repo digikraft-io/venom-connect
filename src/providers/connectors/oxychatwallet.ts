@@ -1,9 +1,9 @@
-import { toggleExtensionWindow } from "../../helpers/backdrop";
-import { getKey as getKeyRaw, log, makeMove } from "../../helpers/utils";
-import { Callbacks } from "../../types";
-import { setupNetworkIdTimer } from "./networkIdTimerUtil";
+import { toggleExtensionWindow } from '../../helpers/backdrop';
+import { getKey as getKeyRaw, log, makeMove } from '../../helpers/utils';
+import { Callbacks } from '../../types';
+import { setupNetworkIdTimer } from './networkIdTimerUtil';
 
-export const oxychatWalletName = "Oxychat Wallet";
+export const oxychatWalletName = 'Oxychat Wallet';
 
 const getKey = (type: string) => getKeyRaw(oxychatWalletName, type);
 
@@ -16,9 +16,9 @@ export const checkIsProviderExist = async (oxychatProvider: any) => {
 
     if (!isExist) {
       log({
-        type: "error",
+        type: 'error',
         key: oxychatWalletName,
-        value: "Extension is not installed",
+        value: 'Extension is not installed'
       });
     }
 
@@ -34,19 +34,19 @@ export const checkIsProviderExist = async (oxychatProvider: any) => {
  */
 const checkOxychatWalletAuth = async (OxychatProvider: any, options: any) => {
   try {
-    const key = getKey("extension/auth");
+    const key = getKey('extension/auth');
 
     log({
       key,
-      value: "check auth start",
+      value: 'check auth start'
     });
 
     const oxychatProvider = await makeMove(
       {
-        before: "provider creating",
-        after: "provider created",
-        error: "provider creating failed",
-        key,
+        before: 'provider creating',
+        after: 'provider created',
+        error: 'provider creating failed',
+        key
       },
       async () => {
         return new OxychatProvider(options);
@@ -55,10 +55,10 @@ const checkOxychatWalletAuth = async (OxychatProvider: any, options: any) => {
 
     await makeMove(
       {
-        before: "injected provider checking",
-        after: "provider injected",
-        error: "injected provider checking failed",
-        key,
+        before: 'injected provider checking',
+        after: 'provider injected',
+        error: 'injected provider checking failed',
+        key
       },
       async () => {
         const isExist = checkIsProviderExist(oxychatProvider);
@@ -69,10 +69,10 @@ const checkOxychatWalletAuth = async (OxychatProvider: any, options: any) => {
 
     const auth = await makeMove(
       {
-        before: "auth checking",
-        after: "auth checked",
-        error: "auth checking failed",
-        key,
+        before: 'auth checking',
+        after: 'auth checked',
+        error: 'auth checking failed',
+        key
       },
       async () => {
         const getProviderState = await oxychatProvider?.getProviderState?.();
@@ -89,12 +89,12 @@ const checkOxychatWalletAuth = async (OxychatProvider: any, options: any) => {
 
     log({
       key,
-      value: "check auth end",
+      value: 'check auth end'
     });
 
     return {
       auth,
-      fallback: oxychatProvider,
+      fallback: oxychatProvider
     };
   } catch (error) {
     // console.error(error);
@@ -112,19 +112,19 @@ const connectToOxychatWallet = async (
   callbacks: Callbacks
 ) => {
   try {
-    const key = getKey("extension");
+    const key = getKey('extension');
 
     log({
       key,
-      value: "connection start",
+      value: 'connection start'
     });
 
     const oxychatProvider = await makeMove(
       {
-        before: "provider creating",
-        after: "provider created",
-        error: "provider creating failed",
-        key,
+        before: 'provider creating',
+        after: 'provider created',
+        error: 'provider creating failed',
+        key
       },
       async () => {
         return new OxychatProvider(options);
@@ -133,10 +133,10 @@ const connectToOxychatWallet = async (
 
     await makeMove(
       {
-        before: "injected provider checking",
-        after: "provider injected",
-        error: "injected provider checking failed",
-        key,
+        before: 'injected provider checking',
+        after: 'provider injected',
+        error: 'injected provider checking failed',
+        key
       },
       async () => {
         const isExist = checkIsProviderExist(oxychatProvider);
@@ -145,27 +145,26 @@ const connectToOxychatWallet = async (
       }
     );
 
-    const permissions = ["basic", "accountInteraction"];
+    const permissions = ['basic', 'accountInteraction'];
 
     await toggleExtensionWindow({
-      isExtensionWindowOpen: true,
+      isExtensionWindowOpen: true
     });
 
     await makeMove(
       {
-        before: `permissions requesting (${permissions.join(", ")})`,
-        after: "permissions requested",
-        error: "permissions requesting failed",
-        key,
+        before: `permissions requesting (${permissions.join(', ')})`,
+        after: 'permissions requested',
+        error: 'permissions requesting failed',
+        key
       },
       async () => {
-        const { accountInteraction } =
-          await oxychatProvider?.requestPermissions({
-            permissions,
-          });
+        const { accountInteraction } = await oxychatProvider?.requestPermissions({
+          permissions
+        });
 
         if (accountInteraction == null) {
-          throw new Error("Insufficient permissions");
+          throw new Error('Insufficient permissions');
         }
 
         setupNetworkIdTimer(
@@ -180,13 +179,13 @@ const connectToOxychatWallet = async (
 
     log({
       key,
-      value: "connection end",
+      value: 'connection end'
     });
 
     callbacks.authorizationCompleted(oxychatProvider);
 
     await toggleExtensionWindow({
-      isExtensionWindowOpen: false,
+      isExtensionWindowOpen: false
     });
 
     return oxychatProvider;
@@ -196,7 +195,7 @@ const connectToOxychatWallet = async (
   }
 
   await toggleExtensionWindow({
-    isExtensionWindowOpen: false,
+    isExtensionWindowOpen: false
   });
 };
 
@@ -204,24 +203,21 @@ const connectToOxychatWallet = async (
  * oxychatProvider: ProviderRpcClient,
  * options: any | undefined
  */
-const getStandaloneConnectionToOxychatWallet = async (
-  OxychatProvider: any,
-  options: any
-) => {
+const getStandaloneConnectionToOxychatWallet = async (OxychatProvider: any, options: any) => {
   try {
-    const key = getKey("extension");
+    const key = getKey('extension');
 
     log({
       key,
-      value: "standalone start",
+      value: 'standalone start'
     });
 
     const oxychatProvider = await makeMove(
       {
-        before: "standalone provider creating",
-        after: "standalone provider created",
-        error: "standalone provider creating failed",
-        key,
+        before: 'standalone provider creating',
+        after: 'standalone provider created',
+        error: 'standalone provider creating failed',
+        key
       },
       async () => {
         return new OxychatProvider(options);
@@ -230,7 +226,7 @@ const getStandaloneConnectionToOxychatWallet = async (
 
     log({
       key,
-      value: "standalone end",
+      value: 'standalone end'
     });
 
     return oxychatProvider;
@@ -241,11 +237,11 @@ const getStandaloneConnectionToOxychatWallet = async (
 
 const goByQRCode = () => {
   try {
-    const key = getKey("qr");
+    const key = getKey('qr');
 
     log({
       key,
-      value: "work in progress",
+      value: 'work in progress'
     });
 
     return undefined as any;
@@ -254,11 +250,11 @@ const goByQRCode = () => {
 
 const goByDeepLinkIOS = () => {
   try {
-    const key = getKey("ios");
+    const key = getKey('ios');
 
     log({
       key,
-      value: "work in progress",
+      value: 'work in progress'
     });
 
     return undefined as any;
@@ -267,11 +263,11 @@ const goByDeepLinkIOS = () => {
 
 const goByDeepLinkAndroid = () => {
   try {
-    const key = getKey("android");
+    const key = getKey('android');
 
     log({
       key,
-      value: "work in progress",
+      value: 'work in progress'
     });
 
     return undefined as any;
@@ -282,17 +278,17 @@ const oxychatWallet = {
   extension: {
     connector: connectToOxychatWallet,
     authChecker: checkOxychatWalletAuth,
-    standalone: getStandaloneConnectionToOxychatWallet,
+    standalone: getStandaloneConnectionToOxychatWallet
   },
   mobile: {
-    connector: goByQRCode,
+    connector: goByQRCode
   },
   ios: {
-    connector: goByDeepLinkIOS,
+    connector: goByDeepLinkIOS
   },
   android: {
-    connector: goByDeepLinkAndroid,
-  },
+    connector: goByDeepLinkAndroid
+  }
 };
 
 export default oxychatWallet;

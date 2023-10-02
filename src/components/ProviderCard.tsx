@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { ConnectorType, Theme, WalletDisplay, WayToConnect } from "../types";
-import { filterNameArr, notSupported } from "./NotSupported";
+import styled from 'styled-components';
+import { ConnectorType, Theme, WalletDisplay, WayToConnect } from '../types';
+import { filterNameArr, notSupported } from './NotSupported';
 
 type Wrapper = {};
 const SWrapper = styled.div<Wrapper>`
@@ -9,8 +9,8 @@ const SWrapper = styled.div<Wrapper>`
 `;
 
 type ProviderContainerWrapper = {
-  item: Theme["item"];
-  popup: Theme["popup"];
+  item: Theme['item'];
+  popup: Theme['popup'];
   isShowCheckWarnings: boolean;
   isFirst: boolean;
 };
@@ -29,26 +29,26 @@ const SProviderContainerWrapper = styled.div<ProviderContainerWrapper>`
 
   /* ========================= */
   margin-top: ${({ isShowCheckWarnings, isFirst }) =>
-    isShowCheckWarnings || isFirst ? 0 : "10px"};
+    isShowCheckWarnings || isFirst ? 0 : '10px'};
   border-radius: ${({
     popup: {
-      border: { borderRadius },
-    },
+      border: { borderRadius }
+    }
   }) => `${borderRadius / 2 + 1}px`};
   padding: ${({
     item: {
-      border: { width },
-    },
+      border: { width }
+    }
   }) => `${width}px`};
   background: ${({
     item: {
-      border: { color },
-    },
+      border: { color }
+    }
   }) => color};
   border-width: ${({
     item: {
-      border: { borderWidth },
-    },
+      border: { borderWidth }
+    }
   }) => `${borderWidth}px`};
   border-color: transparent;
   border-style: solid;
@@ -58,20 +58,20 @@ const SProviderContainerWrapper = styled.div<ProviderContainerWrapper>`
     :hover {
       border-color: ${({
         item: {
-          border: { borderHoverColor },
-        },
+          border: { borderHoverColor }
+        }
       }) => borderHoverColor};
 
       /* ========================= */
       padding: ${({
         item: {
-          border: { width },
-        },
+          border: { width }
+        }
       }) => `${width}px`};
       background: ${({
         item: {
-          border: { hoverColor },
-        },
+          border: { hoverColor }
+        }
       }) => hoverColor};
       /* ========================= */
     }
@@ -81,13 +81,13 @@ const SProviderContainerWrapper = styled.div<ProviderContainerWrapper>`
       /* ========================= */
       padding: ${({
         item: {
-          border: { width, borderWidth },
-        },
+          border: { width, borderWidth }
+        }
       }) => `${width + borderWidth}px`};
       background: ${({
         item: {
-          border: { pressedColor },
-        },
+          border: { pressedColor }
+        }
       }) => pressedColor};
       /* ========================= */
 
@@ -100,8 +100,8 @@ const SProviderContainerWrapper = styled.div<ProviderContainerWrapper>`
 `;
 
 type ProviderContainer = {
-  item: Theme["item"];
-  borderRadius: Theme["popup"]["border"]["borderRadius"];
+  item: Theme['item'];
+  borderRadius: Theme['popup']['border']['borderRadius'];
 };
 const SProviderContainer = styled.div<ProviderContainer>`
   width: 100%;
@@ -120,8 +120,8 @@ const SProviderContainer = styled.div<ProviderContainer>`
   border-radius: ${({ borderRadius }) => `${borderRadius / 2}px`};
   background: ${({
     item: {
-      background: { color },
-    },
+      background: { color }
+    }
   }) => color};
   /* ========================= */
 
@@ -129,7 +129,7 @@ const SProviderContainer = styled.div<ProviderContainer>`
 `;
 
 type IconSection = {
-  item: Theme["item"];
+  item: Theme['item'];
 };
 const SIconSection = styled.div<IconSection>`
   display: flex;
@@ -138,24 +138,24 @@ const SIconSection = styled.div<IconSection>`
   /* ========================= */
   width: ${({
     item: {
-      border: { width },
-    },
+      border: { width }
+    }
   }) => `${56 - width}px`};
   min-width: ${({
     item: {
-      border: { width },
-    },
+      border: { width }
+    }
   }) => `${56 - width}px`};
   padding-left: ${({
     item: {
-      border: { width },
-    },
+      border: { width }
+    }
   }) => `${8 - width}px`};
   /* ========================= */
 `;
 
 type MainSection = {
-  item: Theme["item"];
+  item: Theme['item'];
 };
 const SMainSection = styled.div<MainSection>`
   box-sizing: border-box;
@@ -175,8 +175,8 @@ const SMainSection = styled.div<MainSection>`
   /* ========================= */
   padding: ${({
     item: {
-      border: { width },
-    },
+      border: { width }
+    }
   }) => `${14 - width}px`};
   padding-left: 0;
   /* ========================= */
@@ -195,7 +195,7 @@ const SSubTitleText = styled.div<SubTitleText>`
   line-height: 10px;
 
   letter-spacing: ${({ letterSpacing }) =>
-    typeof letterSpacing === "number" ? `${letterSpacing}px` : letterSpacing};
+    typeof letterSpacing === 'number' ? `${letterSpacing}px` : letterSpacing};
 
   text-align: start;
 `;
@@ -226,7 +226,7 @@ type Img = {
 };
 const SImg = styled.div<Img>`
   max-height: ${({ maxHeight }) =>
-    typeof maxHeight === "number" ? `${maxHeight}px` : maxHeight};
+    typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight};
 
   svg,
   svg path {
@@ -235,7 +235,7 @@ const SImg = styled.div<Img>`
 
   svg {
     height: ${({ maxHeight }) =>
-      typeof maxHeight === "number" ? `${maxHeight}px` : maxHeight};
+      typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight};
   }
 `;
 
@@ -247,7 +247,7 @@ export type ProviderCardProps = WalletDisplay & {
   onClick?: () => void; // todo ?
   connectorType?: ConnectorType;
   browser?: string; // lowercase
-  options?: WayToConnect["options"];
+  options?: WayToConnect['options'];
   isFirst?: boolean;
   isBadBrowser?: boolean;
   allBrowsersNames?: string[];
@@ -269,12 +269,12 @@ export const ProviderCard = ({
   isFirst,
   isBadBrowser,
   allBrowsersNames,
-  browsersNames,
+  browsersNames
 }: ProviderCardProps) => {
   const browserName = browserNameRaw?.toLocaleLowerCase()?.trim();
   const name = nameRaw.replace(
-    "[[browser]]",
-    isCurrentBrowser && browserNameRaw ? browserNameRaw : "Chrome"
+    '[[browser]]',
+    isCurrentBrowser && browserNameRaw ? browserNameRaw : 'Chrome'
   );
   const isShowBadBrowserWarning = !!isFirst && !!isBadBrowser;
 
@@ -287,7 +287,7 @@ export const ProviderCard = ({
             // (allBrowsersNames &&
             //   filterNameArr(allBrowsersNames)?.join(" or ")) ||
 
-            "Google Chrome"
+            'Google Chrome'
           }
         />
       )}
@@ -310,7 +310,7 @@ export const ProviderCard = ({
             browserName={
               (browsersNames && filterNameArr(browsersNames)?.[0]) ||
               // ?.join(" or ")
-              ""
+              ''
             }
           />
         </SSubTitleText>
@@ -325,27 +325,24 @@ export const ProviderCard = ({
 
   const getOptionsSubText = () => {
     switch (connectorType) {
-      case "mobile":
+      case 'mobile':
         const list = options?.devises;
         const elements = Array.isArray(list)
           ? list.map(({ img, text, type }) => {
               return (
-                type !== "apk" && (
+                type !== 'apk' && (
                   <SSubTextItem>
                     {!!logo && (
                       <>
-                        {typeof img === "string" ? (
+                        {typeof img === 'string' ? (
                           <img
                             src={img}
-                            alt={type || ""}
+                            alt={type || ''}
                             height={12}
-                            style={{ maxHeight: "12px" }}
+                            style={{ maxHeight: '12px' }}
                           />
                         ) : (
-                          <SImg
-                            color={themeObject.item.icon.subTitle.color}
-                            maxHeight={12}
-                          >
+                          <SImg color={themeObject.item.icon.subTitle.color} maxHeight={12}>
                             {img}
                           </SImg>
                         )}
@@ -357,13 +354,11 @@ export const ProviderCard = ({
               );
             })
           : null;
-        return elements?.length ? (
-          <SSubTextList>{elements}</SSubTextList>
-        ) : null;
+        return elements?.length ? <SSubTextList>{elements}</SSubTextList> : null;
 
-      case "ios":
-      case "android":
-        return typeof options?.text === "string" ? options.text : null;
+      case 'ios':
+      case 'android':
+        return typeof options?.text === 'string' ? options.text : null;
 
       default:
         break;
@@ -377,31 +372,19 @@ export const ProviderCard = ({
   ) => {
     if (!Array.isArray(arr)) return undefined;
 
-    const current = arr?.find(
-      (extensionObj) => extensionObj.browser === browserName
-    );
-    const fallback = arr?.find(
-      (extensionObj) => extensionObj.browser === "chrome"
-    );
+    const current = arr?.find(extensionObj => extensionObj.browser === browserName);
+    const fallback = arr?.find(extensionObj => extensionObj.browser === 'chrome');
 
     return current || fallback;
   };
 
   const getCardLink = () => {
     // чужой браузер, вернём ссылку на установку
-    if (connectorType === "extension" && !isCurrentBrowser) {
-      return getLinkFromArr(options?.installExtensionLink)?.link as
-        | string
-        | undefined;
-    } else if (
-      connectorType === "extension" &&
-      isCurrentBrowser &&
-      !isProviderExist
-    ) {
-      return getLinkFromArr(options?.installExtensionLink)?.link as
-        | string
-        | undefined;
-    } else if (connectorType === "ios" || connectorType === "android") {
+    if (connectorType === 'extension' && !isCurrentBrowser) {
+      return getLinkFromArr(options?.installExtensionLink)?.link as string | undefined;
+    } else if (connectorType === 'extension' && isCurrentBrowser && !isProviderExist) {
+      return getLinkFromArr(options?.installExtensionLink)?.link as string | undefined;
+    } else if (connectorType === 'ios' || connectorType === 'android') {
       return options?.deepLink as string | undefined;
     }
   };
@@ -409,24 +392,24 @@ export const ProviderCard = ({
   const cardLink = getCardLink();
 
   const getLogo = () => {
-    if (typeof logo === "string") {
-      return themeName === "venom" ? logoWhite : logo;
+    if (typeof logo === 'string') {
+      return themeName === 'venom' ? logoWhite : logo;
     }
 
-    if (typeof logo === "object") {
+    if (typeof logo === 'object') {
       const __logo = logo as { chrome?: string; firefox?: string };
 
       switch (browserName) {
-        case "firefox":
+        case 'firefox':
           return __logo.firefox || __logo.chrome;
 
-        case "chrome":
+        case 'chrome':
         default:
           return __logo.chrome;
       }
     }
 
-    return "";
+    return '';
   };
 
   // список способов подключения
@@ -436,7 +419,7 @@ export const ProviderCard = ({
       <a
         {...(cardLink
           ? {
-              href: cardLink,
+              href: cardLink
             }
           : {})}
         target="_blank"
@@ -455,11 +438,7 @@ export const ProviderCard = ({
             <SIconSection item={themeObject.item}>
               {!!logo && (
                 <>
-                  <img
-                    src={getLogo()}
-                    alt={name}
-                    style={{ maxHeight: "24px" }}
-                  />
+                  <img src={getLogo()} alt={name} style={{ maxHeight: '24px' }} />
                 </>
               )}
             </SIconSection>
@@ -467,9 +446,7 @@ export const ProviderCard = ({
               <STitle>{name}</STitle>
               {!!description && <SSubTitleText>{description}</SSubTitleText>}
               {!!optionsSubText && (
-                <SSubTitleText letterSpacing={1.02}>
-                  {optionsSubText}
-                </SSubTitleText>
+                <SSubTitleText letterSpacing={1.02}>{optionsSubText}</SSubTitleText>
               )}
               {NotSupportedText}
             </SMainSection>

@@ -1,6 +1,6 @@
-import everwallet from "./everwallet";
-import oxychatwallet from "./oxychatwallet";
-import oneartwallet from "./oneartwallet";
-import venomwallet from "./venomwallet";
+import everwallet from './everwallet';
+import oneartwallet from './oneartwallet';
+import oxychatwallet from './oxychatwallet';
+import venomwallet from './venomwallet';
 
-export { everwallet, oxychatwallet, oneartwallet, venomwallet };
+export { everwallet, oneartwallet, oxychatwallet, venomwallet };

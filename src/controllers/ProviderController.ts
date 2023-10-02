@@ -4,10 +4,10 @@ import {
   Events,
   EXTENSION_AUTH_EVENT,
   EXTENSION_WINDOW_CLOSED_EVENT,
-  SELECT_EVENT,
-} from "../helpers/events";
-import { checkIsCurrentBrowser } from "../helpers/utils";
-import * as allProviders from "../providers";
+  SELECT_EVENT
+} from '../helpers/events';
+import { checkIsCurrentBrowser } from '../helpers/utils';
+import * as allProviders from '../providers';
 import {
   ConnectorType,
   ExtensionConnector,
@@ -16,16 +16,16 @@ import {
   ProviderOptionsListWithOnClick,
   ProviderOptionsWithConnector,
   ProviderOptionsWithConnectorOptional,
-  UserProvidersOptions,
-} from "../types";
-import { EventController } from "./EventController";
+  UserProvidersOptions
+} from '../types';
+import { EventController } from './EventController';
 
-const sortingArr: ConnectorType[] = ["extension", "mobile", "ios", "android"];
+const sortingArr: ConnectorType[] = ['extension', 'mobile', 'ios', 'android'];
 
 export const getPromiseRaw = (
   windowObject: any,
   walletId: string,
-  type: string | undefined = "extension",
+  type: string | undefined = 'extension',
   nTries: number = 0
 ) => {
   const promises = {
@@ -46,13 +46,13 @@ export const getPromiseRaw = (
                 nTries--;
               } else {
                 clearInterval(interval);
-                reject("Venom wallet is not found");
+                reject('Venom wallet is not found');
               }
             }, 100);
           });
         }
         return Promise.reject();
-      },
+      }
     },
     everwallet: {
       extension: () => {
@@ -71,13 +71,13 @@ export const getPromiseRaw = (
                 nTries--;
               } else {
                 clearInterval(interval);
-                reject("Ever wallet is not found");
+                reject('Ever wallet is not found');
               }
             }, 100);
           });
         }
         return Promise.reject();
-      },
+      }
     },
     oxychatwallet: {
       // todo
@@ -97,13 +97,13 @@ export const getPromiseRaw = (
                 nTries--;
               } else {
                 clearInterval(interval);
-                reject("Ever wallet is not found");
+                reject('Ever wallet is not found');
               }
             }, 100);
           });
         }
         return Promise.reject();
-      },
+      }
     },
     oneartwallet: {
       extension: () => {
@@ -121,14 +121,14 @@ export const getPromiseRaw = (
                 nTries--;
               } else {
                 clearInterval(interval);
-                reject("OneArt wallet is not found");
+                reject('OneArt wallet is not found');
               }
             }, 100);
           });
         }
         return Promise.reject();
-      },
-    },
+      }
+    }
   };
 
   // @ts-ignore
@@ -147,11 +147,11 @@ export class ProviderController {
   private _currentProvider: any;
 
   public getStandalone = async (walletId: string) => {
-    const wallet = this.providers?.find((provider) => provider.id === walletId);
+    const wallet = this.providers?.find(provider => provider.id === walletId);
 
     if (wallet) {
       const standaloneFromUser = wallet?.walletWaysToConnect.find(
-        (way) => way.type === "extension" && !!way.standalone
+        way => way.type === 'extension' && !!way.standalone
       );
       if (standaloneFromUser?.standalone) {
         return standaloneFromUser.standalone(
@@ -167,7 +167,7 @@ export class ProviderController {
   public set currentProvider(cp) {
     const updateVenomModal = () =>
       window.updateVenomModal({
-        isFullProvider: !!cp,
+        isFullProvider: !!cp
       });
 
     (function tryUpdateVenomModal() {
@@ -196,10 +196,10 @@ export class ProviderController {
             extension: {
               forceUseFallback: true,
               fallback:
-                getPromiseRaw(window, "venomwallet", undefined, this.nTries) ||
-                (() => Promise.reject("venomwallet fallback error")),
+                getPromiseRaw(window, 'venomwallet', undefined, this.nTries) ||
+                (() => Promise.reject('venomwallet fallback error'))
             },
-            standalone: {}, // ?
+            standalone: {} // ?
           }
         : {},
       everwallet: window
@@ -207,10 +207,10 @@ export class ProviderController {
             extension: {
               forceUseFallback: true,
               fallback:
-                getPromiseRaw(window, "everwallet", undefined, this.nTries) ||
-                (() => Promise.reject("everwallet fallback error")),
+                getPromiseRaw(window, 'everwallet', undefined, this.nTries) ||
+                (() => Promise.reject('everwallet fallback error'))
             },
-            standalone: {}, // ?
+            standalone: {} // ?
           }
         : {},
       oxychatwallet: window
@@ -218,16 +218,12 @@ export class ProviderController {
             extension: {
               forceUseFallback: true,
               fallback:
-                getPromiseRaw(
-                  window,
-                  "oxychatwallet",
-                  undefined,
-                  this.nTries
-                ) || (() => Promise.reject("oxychatwallet fallback error")),
+                getPromiseRaw(window, 'oxychatwallet', undefined, this.nTries) ||
+                (() => Promise.reject('oxychatwallet fallback error'))
             },
-            standalone: {}, // ?
+            standalone: {} // ?
           }
-        : {},
+        : {}
     };
 
     this.checkNetworkId = options.checkNetworkId;
@@ -237,8 +233,8 @@ export class ProviderController {
 
     // TODO можно будет задать order для списка
     this.providers = (Object.keys(allProviders.connectors).reverse() || [])
-      .filter((id) => this.providerOptions?.[id])
-      .map((id) => {
+      .filter(id => this.providerOptions?.[id])
+      .map(id => {
         const providerInfo: ProviderOptionsWithConnector =
           // @ts-ignore
           allProviders.providers?.[id] || undefined;
@@ -247,7 +243,7 @@ export class ProviderController {
           // wallet,
           links,
           walletWaysToConnect,
-          defaultWalletWaysToConnect,
+          defaultWalletWaysToConnect
         } = this.providerOptions?.[id];
 
         const types = walletWaysToConnect?.map(({ type }) => type);
@@ -258,19 +254,17 @@ export class ProviderController {
           // wallet,
           links,
           walletWaysToConnect: (
-            providerInfo.walletWaysToConnect as ProviderOptionsWithConnectorOptional["walletWaysToConnect"]
+            providerInfo.walletWaysToConnect as ProviderOptionsWithConnectorOptional['walletWaysToConnect']
           )
-            .filter((walletWayToConnect) => {
+            .filter(walletWayToConnect => {
               return (
-                !!defaultWalletWaysToConnect?.includes(
-                  walletWayToConnect.type
-                ) &&
+                !!defaultWalletWaysToConnect?.includes(walletWayToConnect.type) &&
                 (!types?.includes(walletWayToConnect.type) ||
                   !ids?.includes(walletWayToConnect.id))
               );
             })
             .concat(walletWaysToConnect || [])
-            .map((walletWayToConnect) => {
+            .map(walletWayToConnect => {
               const defaultWay =
                 // @ts-ignore
                 allProviders?.providers?.[id]?.walletWaysToConnect?.find(
@@ -285,18 +279,15 @@ export class ProviderController {
 
               const userOptions = walletWayToConnect.packageOptions;
 
-              const defaultOptions =
-                defaultPackageOptions[id]?.[walletWayToConnect.type];
+              const defaultOptions = defaultPackageOptions[id]?.[walletWayToConnect.type];
 
               const packageOptions = isCurrentDevise.isCurrentBrowser
                 ? userOptions || defaultOptions || {}
                 : {};
 
-              const userOptionsStandalone =
-                walletWayToConnect.packageOptionsStandalone;
+              const userOptionsStandalone = walletWayToConnect.packageOptionsStandalone;
 
-              const defaultOptionsStandalone =
-                defaultPackageOptions[id]?.["standalone"];
+              const defaultOptionsStandalone = defaultPackageOptions[id]?.['standalone'];
 
               const packageOptionsStandalone =
                 userOptionsStandalone || defaultOptionsStandalone || {};
@@ -311,34 +302,24 @@ export class ProviderController {
                 connector:
                   walletWayToConnect.connector ||
                   // @ts-ignore
-                  allProviders?.connectors?.[id]?.[walletWayToConnect.type]?.[
-                    "connector"
-                  ],
+                  allProviders?.connectors?.[id]?.[walletWayToConnect.type]?.['connector'],
                 authConnector:
                   walletWayToConnect.authConnector ||
                   // @ts-ignore
-                  allProviders?.connectors?.[id]?.[walletWayToConnect.type]?.[
-                    "authChecker"
-                  ],
+                  allProviders?.connectors?.[id]?.[walletWayToConnect.type]?.['authChecker'],
                 standalone:
                   walletWayToConnect.standalone ||
                   // @ts-ignore
-                  allProviders?.connectors?.[id]?.[walletWayToConnect.type]?.[
-                    "standalone"
-                  ],
+                  allProviders?.connectors?.[id]?.[walletWayToConnect.type]?.['standalone'],
                 packageOptions,
                 packageOptionsStandalone,
                 options: {
-                  ...(typeof defaultWay?.options === "object"
-                    ? defaultWay?.options
-                    : {}),
-                  ...walletWayToConnect?.options,
-                },
+                  ...(typeof defaultWay?.options === 'object' ? defaultWay?.options : {}),
+                  ...walletWayToConnect?.options
+                }
               };
             })
-            .sort(
-              (a, b) => sortingArr.indexOf(a.type) - sortingArr.indexOf(b.type)
-            ),
+            .sort((a, b) => sortingArr.indexOf(a.type) - sortingArr.indexOf(b.type))
         };
       });
   }
@@ -355,18 +336,18 @@ export class ProviderController {
       const obj = {
         ...provider,
         walletWaysToConnect: walletWaysToConnect
-          .map((walletWayToConnect) => {
+          .map(walletWayToConnect => {
             const { connector, id: connectorId } = walletWayToConnect;
             const isShould = this.shouldDisplayProvider(id);
 
             if (isShould && connector)
               return {
                 ...walletWayToConnect,
-                onClick: () => this.connectTo(id, connectorId, connector),
+                onClick: () => this.connectTo(id, connectorId, connector)
               };
             else return null;
           })
-          .filter((walletWayToConnect) => !!walletWayToConnect),
+          .filter(walletWayToConnect => !!walletWayToConnect)
       };
 
       if (obj.walletWaysToConnect.length) {
@@ -379,15 +360,15 @@ export class ProviderController {
   };
 
   public getProvider = (id: string) => {
-    return this.providers.find((provider) => provider.id === id);
+    return this.providers.find(provider => provider.id === id);
   };
 
   public getProviderOption(id: string, connectorId: string, key: string) {
     const walletWaysToConnect = this.providers?.find(
-      (provider) => provider.id === id
+      provider => provider.id === id
     )?.walletWaysToConnect;
     const walletWayToConnect = walletWaysToConnect?.find(
-      (walletWayToConnect) => walletWayToConnect.id === connectorId
+      walletWayToConnect => walletWayToConnect.id === connectorId
     );
 
     // @ts-ignore
@@ -402,18 +383,10 @@ export class ProviderController {
     try {
       this.currentProvider = null;
 
-      const providerPackage = this.getProviderOption(
-        id,
-        connectorId,
-        "package"
-      );
-      const providerOptions = this.getProviderOption(
-        id,
-        connectorId,
-        "packageOptions"
-      );
+      const providerPackage = this.getProviderOption(id, connectorId, 'package');
+      const providerOptions = this.getProviderOption(id, connectorId, 'packageOptions');
       const options = {
-        ...providerOptions,
+        ...providerOptions
       };
 
       const provider = await authConnector(providerPackage, options);
@@ -435,30 +408,22 @@ export class ProviderController {
       this.currentProvider = null;
 
       this.eventController.trigger(SELECT_EVENT, id);
-      const providerPackage = this.getProviderOption(
-        id,
-        connectorId,
-        "package"
-      );
-      const providerOptions = this.getProviderOption(
-        id,
-        connectorId,
-        "packageOptions"
-      );
+      const providerPackage = this.getProviderOption(id, connectorId, 'package');
+      const providerOptions = this.getProviderOption(id, connectorId, 'packageOptions');
       const options = {
-        ...providerOptions,
+        ...providerOptions
       };
 
       const provider = await connector(providerPackage, options, {
-        authorizationCompleted: (_provider) => {
+        authorizationCompleted: _provider => {
           this.eventController.trigger(EXTENSION_AUTH_EVENT, _provider);
         },
         extensionWindowClosed: () => {
           this.eventController.trigger(EXTENSION_WINDOW_CLOSED_EVENT);
         },
-        extensionWindowError: (error) => {
+        extensionWindowError: error => {
           this.eventController.trigger(ERROR_EVENT, error);
-        },
+        }
       });
 
       this.currentProvider = provider;
@@ -472,20 +437,20 @@ export class ProviderController {
   public on(event: Events, callback: (result: any) => void): () => void {
     this.eventController.on({
       event,
-      callback,
+      callback
     });
 
     return () =>
       this.eventController.off({
         event,
-        callback,
+        callback
       });
   }
 
   public off(event: Events, callback?: (result: any) => void): void {
     this.eventController.off({
       event,
-      callback,
+      callback
     });
   }
 }

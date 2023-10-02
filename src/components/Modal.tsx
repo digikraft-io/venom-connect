@@ -1,20 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useMemo, useState } from "react";
-import styled from "styled-components";
-import { checkIsCurrentBrowser } from "../helpers/utils";
-import AppStore from "../images/AppStore.svg";
-import DownloadApk from "../images/DownloadApk.svg";
-import GooglePlay from "../images/GooglePlay.svg";
-import {
-  ProviderOptionsListWithOnClick,
-  SimpleFunction,
-  ThemeConfig,
-} from "../types";
-import { VENOM_CONNECT_MODAL_ID } from "../VenomConnect";
-import AbstractPopUp, { SECONDS } from "./AbstractPopUp";
-import { CardManager } from "./CardManager";
-import { QrCard } from "./InnerCard";
-import { WrongNetworkPopup } from "./WrongNetworkPopup";
+import { useEffect, useMemo, useState } from 'react';
+import styled from 'styled-components';
+import { VENOM_CONNECT_MODAL_ID } from '../VenomConnect';
+import { checkIsCurrentBrowser } from '../helpers/utils';
+import AppStore from '../images/AppStore.svg';
+import DownloadApk from '../images/DownloadApk.svg';
+import GooglePlay from '../images/GooglePlay.svg';
+import { ProviderOptionsListWithOnClick, SimpleFunction, ThemeConfig } from '../types';
+import AbstractPopUp, { SECONDS } from './AbstractPopUp';
+import { CardManager } from './CardManager';
+import { QrCard } from './InnerCard';
+import { WrongNetworkPopup } from './WrongNetworkPopup';
 
 const DoneButton = styled.div`
   background: #11a97d;
@@ -29,7 +25,7 @@ const DoneButton = styled.div`
   justify-content: center;
   margin-top: 20px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -60,7 +56,7 @@ enum Slide {
   walletsList,
   currentWallet,
   innerCard,
-  waitingInstallation,
+  waitingInstallation
 }
 
 type Case = {
@@ -106,9 +102,9 @@ const INITIAL_STATE: ModalState = {
   wrongNetwork: false,
   isFullProvider: false,
   popUpText: {
-    title: "Waiting for an action in the extension window",
+    title: 'Waiting for an action in the extension window'
     // text: '',
-  },
+  }
 };
 
 export const Modal = ({
@@ -119,7 +115,7 @@ export const Modal = ({
   options,
   onClose,
   changeWallet,
-  disconnect,
+  disconnect
 }: ModalProps) => {
   window.updateVenomModal = async (state: Partial<ModalState>) => {
     if (state.show !== undefined) {
@@ -149,8 +145,8 @@ export const Modal = ({
   };
 
   const getWalletWaysToConnect = (_walletId: string | undefined) => {
-    let ret: ProviderOptionsListWithOnClick[0]["walletWaysToConnect"] = [];
-    options.forEach((o) => {
+    let ret: ProviderOptionsListWithOnClick[0]['walletWaysToConnect'] = [];
+    options.forEach(o => {
       ret = [...ret, ...o.walletWaysToConnect];
     });
     return ret;
@@ -171,8 +167,7 @@ export const Modal = ({
   const getInitialWalletWaysToConnect = () => getWalletWaysToConnect(undefined);
 
   const getInitialWalletWayToConnect = () => {
-    const { id, walletWaysToConnect: _walletWaysToConnect } =
-      getInitialWalletOption() || {};
+    const { id, walletWaysToConnect: _walletWaysToConnect } = getInitialWalletOption() || {};
     return (
       (id !== undefined &&
         id === walletId &&
@@ -187,10 +182,10 @@ export const Modal = ({
   // не актуален
   const [walletId, setWalletId] = useState<string | undefined>();
   const [walletWaysToConnect, setWalletWaysToConnect] = useState<
-    ProviderOptionsListWithOnClick[0]["walletWaysToConnect"] | undefined
+    ProviderOptionsListWithOnClick[0]['walletWaysToConnect'] | undefined
   >();
   const [walletWayToConnect, setWalletWayToConnect] = useState<
-    ProviderOptionsListWithOnClick[0]["walletWaysToConnect"][0] | undefined
+    ProviderOptionsListWithOnClick[0]['walletWaysToConnect'][0] | undefined
   >();
 
   const [themeConfig, setThemeConfig] = useState(initThemeConfig);
@@ -201,9 +196,7 @@ export const Modal = ({
   const [isFullProvider, setIsFullProvider] = useState<boolean | undefined>(
     INITIAL_STATE.isFullProvider
   );
-  const [isExtensionWindowOpen, setIsExtensionWindowOpen] = useState<
-    boolean | undefined
-  >();
+  const [isExtensionWindowOpen, setIsExtensionWindowOpen] = useState<boolean | undefined>();
   const [popUpText, setPopUpText] = useState(INITIAL_STATE.popUpText);
 
   useEffect(() => {
@@ -256,14 +249,10 @@ export const Modal = ({
   // выбран способ коннекта
   const onCurrentCardItemClick = (name: string, id: string, cb: () => void) => {
     const _walletWayToConnect = walletWaysToConnect?.find(
-      (_walletWayToConnect) =>
-        _walletWayToConnect.name === name && _walletWayToConnect.id === id
+      _walletWayToConnect => _walletWayToConnect.name === name && _walletWayToConnect.id === id
     );
     setWalletWayToConnect(_walletWayToConnect);
-    if (
-      slide === Slide.currentWallet &&
-      _walletWayToConnect?.type === "mobile"
-    ) {
+    if (slide === Slide.currentWallet && _walletWayToConnect?.type === 'mobile') {
       setSlide(Slide.innerCard);
     } else {
       cb();
@@ -281,9 +270,9 @@ export const Modal = ({
           {options.map(({ id /* wallet */ }, i) => (
             <CardManager
               key={id}
-              name={"wallet.name"} // fix
-              logo={"wallet.logo"} // fix
-              description={"wallet.description"} // fix
+              name={'wallet.name'} // fix
+              logo={'wallet.logo'} // fix
+              description={'wallet.description'} // fix
               themeObject={themeConfig.theme}
               themeName={themeConfig.name}
               onClick={() => onWalletCardItemClick(id)}
@@ -298,7 +287,7 @@ export const Modal = ({
           <br />
           connect:
         </>
-      ),
+      )
     };
   }, [options, themeConfig.theme]);
 
@@ -331,24 +320,21 @@ export const Modal = ({
                       (r, wallet) =>
                         r ||
                         !!wallet.walletWaysToConnect
-                          .filter((way) => way.type === "extension")
+                          .filter(way => way.type === 'extension')
                           .reduce(
                             (rInner, way) =>
                               rInner ||
-                              checkIsCurrentBrowser(
-                                way.options.isCurrentBrowser
-                              ).isCurrentBrowser,
+                              checkIsCurrentBrowser(way.options.isCurrentBrowser)
+                                .isCurrentBrowser,
                             false
                           ),
                       false
                     )
                   }
                   allBrowsersNames={options
-                    .map((wallet) =>
-                      wallet.walletWaysToConnect.map((way) =>
-                        way.options.isCurrentBrowser?.map(
-                          (browser: any) => browser?.browser
-                        )
+                    .map(wallet =>
+                      wallet.walletWaysToConnect.map(way =>
+                        way.options.isCurrentBrowser?.map((browser: any) => browser?.browser)
                       )
                     )
                     .flat(100)}
@@ -359,7 +345,7 @@ export const Modal = ({
           )}
         </SProviders>
       ),
-      title: <>Choose the way to connect:</>,
+      title: <>Choose the way to connect:</>
       // title: <>Choose the way to connect {walletName}:</>,
     };
   }, [options, themeConfig.theme, walletId, walletWaysToConnect]);
@@ -369,7 +355,7 @@ export const Modal = ({
       return {
         type: Slide.innerCard,
         element: <>No way to connect</>,
-        title: "Error",
+        title: 'Error'
       };
 
     // ссылки на магазины скачивания
@@ -379,65 +365,50 @@ export const Modal = ({
         <>
           <div
             style={{
-              display: "flex",
-              flexWrap: "wrap",
-              marginTop: "32px",
-              width: "286px",
-              justifyContent: "space-between",
-              marginRight: "auto",
-              marginLeft: "auto",
-              rowGap: "16px",
+              display: 'flex',
+              flexWrap: 'wrap',
+              marginTop: '32px',
+              width: '286px',
+              justifyContent: 'space-between',
+              marginRight: 'auto',
+              marginLeft: 'auto',
+              rowGap: '16px'
             }}
           >
             <div
               style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "center",
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center'
               }}
             >
               <div>
                 {walletWayToConnect.options.qr ? (
                   <>
-                    <QrCard
-                      qr={walletWayToConnect.options.qr}
-                      themeConfig={themeConfig}
-                    />
+                    <QrCard qr={walletWayToConnect.options.qr} themeConfig={themeConfig} />
                   </>
                 ) : null}
               </div>
             </div>
             {/*<QrCard {...walletWayToConnect.options} themeConfig={themeConfig} />*/}
             {walletWayToConnect.options.devises?.map((device: any) => {
-              if (device.type === "ios") {
+              if (device.type === 'ios') {
                 return (
-                  <a
-                    href={device.deepLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <a href={device.deepLink} target="_blank" rel="noopener noreferrer">
                     <img src={AppStore} alt="" />
                   </a>
                 );
               }
-              if (device.type === "android") {
+              if (device.type === 'android') {
                 return (
-                  <a
-                    href={device.deepLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <a href={device.deepLink} target="_blank" rel="noopener noreferrer">
                     <img src={GooglePlay} alt="" />
                   </a>
                 );
               }
-              if (device.type === "apk") {
+              if (device.type === 'apk') {
                 return (
-                  <a
-                    href={device.deepLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <a href={device.deepLink} target="_blank" rel="noopener noreferrer">
                     <img src={DownloadApk} alt="" />
                   </a>
                 );
@@ -448,9 +419,9 @@ export const Modal = ({
           </div>
           <div
             style={{
-              margin: "24px 0px 2px",
-              cursor: "pointer",
-              color: "#11A97D",
+              margin: '24px 0px 2px',
+              cursor: 'pointer',
+              color: '#11A97D'
             }}
             onClick={goBack}
           >
@@ -464,7 +435,7 @@ export const Modal = ({
           <br />
           {walletWayToConnect.name}
         </>
-      ),
+      )
     };
   }, [options, themeConfig.theme, walletId, walletWayToConnect]);
 
@@ -476,26 +447,20 @@ export const Modal = ({
       element: (
         <>
           <div style={{ marginTop: 20 }}>
-            We are currently waiting for the installation and configuration of
-            the{" "}
-            {error?.includes("Venom")
-              ? "Venom"
-              : error?.includes("Ever")
-              ? "Ever"
-              : ""}{" "}
-            Wallet extension
+            We are currently waiting for the installation and configuration of the{' '}
+            {error?.includes('Venom') ? 'Venom' : error?.includes('Ever') ? 'Ever' : ''} Wallet
+            extension
           </div>
           <DoneButton onClick={() => window.location.reload()}>Done</DoneButton>
         </>
       ),
-      title: <>Waiting for the installation </>,
+      title: <>Waiting for the installation </>
     };
   }, [options, themeConfig.theme]);
 
   const cards = [walletCardList, currentWalletCards, innerCard];
 
-  const getCard: () => Case | undefined = () =>
-    cards.find((card) => card.type === slide);
+  const getCard: () => Case | undefined = () => cards.find(card => card.type === slide);
 
   const card = getCard();
 
@@ -516,7 +481,7 @@ export const Modal = ({
 
   // removed error handling window, only if not found
   useEffect(() => {
-    if (!!error && !error.includes("wallet is not found")) {
+    if (!!error && !error.includes('wallet is not found')) {
       onCloseCrossClick();
     }
   }, [error]);
@@ -536,13 +501,13 @@ export const Modal = ({
         `}
       </style>
       {error ? (
-        error.includes("wallet is not found") ? (
+        error.includes('wallet is not found') ? (
           <AbstractPopUp
             show={!!error}
             hide={!error}
             themeObject={themeConfig.theme}
             cardHeader={{
-              text: waitingInstallation.title,
+              text: waitingInstallation.title
             }}
           >
             {waitingInstallation?.element}
@@ -571,9 +536,9 @@ export const Modal = ({
             onClose={onCloseCrossClick}
             themeObject={themeConfig.theme}
             cardHeader={{
-              text: card?.title || "your wallet",
+              text: card?.title || 'your wallet',
               // fontSize: card?.type === Slide.currentWallet ? 20 : undefined,
-              textAlign: "left",
+              textAlign: 'left'
             }}
             goBack={slide !== getInitialSlide() ? goBack : undefined}
           >
@@ -584,7 +549,7 @@ export const Modal = ({
             hide={!(!!wrongNetwork && !show && !!isFullProvider)}
             themeObject={themeConfig.theme}
             cardHeader={{
-              text: "Active network is wrong",
+              text: 'Active network is wrong'
             }}
           >
             <WrongNetworkPopup
@@ -599,7 +564,7 @@ export const Modal = ({
             hide={!isExtensionWindowOpen}
             themeObject={themeConfig.theme}
             cardHeader={{
-              text: popUpText.title,
+              text: popUpText.title
             }}
           >
             <>{popUpText.text}</>

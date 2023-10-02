@@ -1,9 +1,9 @@
-import { toggleExtensionWindow } from "../../helpers/backdrop";
-import { getKey as getKeyRaw, log, makeMove } from "../../helpers/utils";
-import { Callbacks } from "../../types";
-import { setupNetworkIdTimer } from "./networkIdTimerUtil";
+import { toggleExtensionWindow } from '../../helpers/backdrop';
+import { getKey as getKeyRaw, log, makeMove } from '../../helpers/utils';
+import { Callbacks } from '../../types';
+import { setupNetworkIdTimer } from './networkIdTimerUtil';
 
-export const oneartWalletName = "OneArt Wallet";
+export const oneartWalletName = 'OneArt Wallet';
 
 const getKey = (type: string) => getKeyRaw(oneartWalletName, type);
 
@@ -16,9 +16,9 @@ export const checkIsProviderExist = async (oneartProvider: any) => {
 
     if (!isExist) {
       log({
-        type: "error",
+        type: 'error',
         key: oneartWalletName,
-        value: "Extension is not installed",
+        value: 'Extension is not installed'
       });
     }
 
@@ -34,19 +34,19 @@ export const checkIsProviderExist = async (oneartProvider: any) => {
  */
 const checkOneartWalletAuth = async (OneartProvider: any, options: any) => {
   try {
-    const key = getKey("extension/auth");
+    const key = getKey('extension/auth');
 
     log({
       key,
-      value: "check auth start",
+      value: 'check auth start'
     });
 
     const oneartProvider = await makeMove(
       {
-        before: "provider creating",
-        after: "provider created",
-        error: "provider creating failed",
-        key,
+        before: 'provider creating',
+        after: 'provider created',
+        error: 'provider creating failed',
+        key
       },
       async () => {
         return new OneartProvider(options);
@@ -55,10 +55,10 @@ const checkOneartWalletAuth = async (OneartProvider: any, options: any) => {
 
     await makeMove(
       {
-        before: "injected provider checking",
-        after: "provider injected",
-        error: "injected provider checking failed",
-        key,
+        before: 'injected provider checking',
+        after: 'provider injected',
+        error: 'injected provider checking failed',
+        key
       },
       async () => {
         const isExist = checkIsProviderExist(oneartProvider);
@@ -69,10 +69,10 @@ const checkOneartWalletAuth = async (OneartProvider: any, options: any) => {
 
     const auth = await makeMove(
       {
-        before: "auth checking",
-        after: "auth checked",
-        error: "auth checking failed",
-        key,
+        before: 'auth checking',
+        after: 'auth checked',
+        error: 'auth checking failed',
+        key
       },
       async () => {
         const getProviderState = await oneartProvider?.getProviderState?.();
@@ -88,12 +88,12 @@ const checkOneartWalletAuth = async (OneartProvider: any, options: any) => {
 
     log({
       key,
-      value: "check auth end",
+      value: 'check auth end'
     });
 
     return {
       auth,
-      fallback: oneartProvider,
+      fallback: oneartProvider
     };
   } catch (error) {
     // console.error(error);
@@ -111,19 +111,19 @@ const connectToOneartWallet = async (
   callbacks: Callbacks
 ) => {
   try {
-    const key = getKey("extension");
+    const key = getKey('extension');
 
     log({
       key,
-      value: "connection start",
+      value: 'connection start'
     });
 
     const oneartProvider = await makeMove(
       {
-        before: "provider creating",
-        after: "provider created",
-        error: "provider creating failed",
-        key,
+        before: 'provider creating',
+        after: 'provider created',
+        error: 'provider creating failed',
+        key
       },
       async () => {
         return new OneartProvider(options);
@@ -132,10 +132,10 @@ const connectToOneartWallet = async (
 
     await makeMove(
       {
-        before: "injected provider checking",
-        after: "provider injected",
-        error: "injected provider checking failed",
-        key,
+        before: 'injected provider checking',
+        after: 'provider injected',
+        error: 'injected provider checking failed',
+        key
       },
       async () => {
         const isExist = checkIsProviderExist(oneartProvider);
@@ -144,27 +144,26 @@ const connectToOneartWallet = async (
       }
     );
 
-    const permissions = ["basic", "accountInteraction"];
+    const permissions = ['basic', 'accountInteraction'];
 
     await toggleExtensionWindow({
-      isExtensionWindowOpen: true,
+      isExtensionWindowOpen: true
     });
 
     await makeMove(
       {
-        before: `permissions requesting (${permissions.join(", ")})`,
-        after: "permissions requested",
-        error: "permissions requesting failed",
-        key,
+        before: `permissions requesting (${permissions.join(', ')})`,
+        after: 'permissions requested',
+        error: 'permissions requesting failed',
+        key
       },
       async () => {
-        const { accountInteraction } =
-          await oneartProvider?.requestPermissions({
-            permissions,
-          });
+        const { accountInteraction } = await oneartProvider?.requestPermissions({
+          permissions
+        });
 
         if (accountInteraction == null) {
-          throw new Error("Insufficient permissions");
+          throw new Error('Insufficient permissions');
         }
 
         setupNetworkIdTimer(
@@ -179,13 +178,13 @@ const connectToOneartWallet = async (
 
     log({
       key,
-      value: "connection end",
+      value: 'connection end'
     });
 
     callbacks.authorizationCompleted(oneartProvider);
 
     await toggleExtensionWindow({
-      isExtensionWindowOpen: false,
+      isExtensionWindowOpen: false
     });
 
     return oneartProvider;
@@ -195,7 +194,7 @@ const connectToOneartWallet = async (
   }
 
   await toggleExtensionWindow({
-    isExtensionWindowOpen: false,
+    isExtensionWindowOpen: false
   });
 };
 
@@ -203,24 +202,21 @@ const connectToOneartWallet = async (
  * oneartProvider: ProviderRpcClient,
  * options: any | undefined
  */
-const getStandaloneConnectionToOneartWallet = async (
-  OneartProvider: any,
-  options: any
-) => {
+const getStandaloneConnectionToOneartWallet = async (OneartProvider: any, options: any) => {
   try {
-    const key = getKey("extension");
+    const key = getKey('extension');
 
     log({
       key,
-      value: "standalone start",
+      value: 'standalone start'
     });
 
     const oneartProvider = await makeMove(
       {
-        before: "standalone provider creating",
-        after: "standalone provider created",
-        error: "standalone provider creating failed",
-        key,
+        before: 'standalone provider creating',
+        after: 'standalone provider created',
+        error: 'standalone provider creating failed',
+        key
       },
       async () => {
         return new OneartProvider(options);
@@ -229,7 +225,7 @@ const getStandaloneConnectionToOneartWallet = async (
 
     log({
       key,
-      value: "standalone end",
+      value: 'standalone end'
     });
 
     return oneartProvider;
@@ -240,11 +236,11 @@ const getStandaloneConnectionToOneartWallet = async (
 
 const goByQRCode = () => {
   try {
-    const key = getKey("qr");
+    const key = getKey('qr');
 
     log({
       key,
-      value: "work in progress",
+      value: 'work in progress'
     });
 
     return undefined as any;
@@ -253,11 +249,11 @@ const goByQRCode = () => {
 
 const goByDeepLinkIOS = () => {
   try {
-    const key = getKey("ios");
+    const key = getKey('ios');
 
     log({
       key,
-      value: "work in progress",
+      value: 'work in progress'
     });
 
     return undefined as any;
@@ -266,11 +262,11 @@ const goByDeepLinkIOS = () => {
 
 const goByDeepLinkAndroid = () => {
   try {
-    const key = getKey("android");
+    const key = getKey('android');
 
     log({
       key,
-      value: "work in progress",
+      value: 'work in progress'
     });
 
     return undefined as any;
@@ -281,17 +277,17 @@ const oneartWallet = {
   extension: {
     connector: connectToOneartWallet,
     authChecker: checkOneartWalletAuth,
-    standalone: getStandaloneConnectionToOneartWallet,
+    standalone: getStandaloneConnectionToOneartWallet
   },
   mobile: {
-    connector: goByQRCode,
+    connector: goByQRCode
   },
   ios: {
-    connector: goByDeepLinkIOS,
+    connector: goByDeepLinkIOS
   },
   android: {
-    connector: goByDeepLinkAndroid,
-  },
+    connector: goByDeepLinkAndroid
+  }
 };
 
 export default oneartWallet;

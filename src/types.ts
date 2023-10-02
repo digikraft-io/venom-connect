@@ -1,5 +1,3 @@
-import { ThemeNameList } from "./themes";
-
 type BackdropTheme = {
   color: string;
   opacity?: number | string;
@@ -99,7 +97,7 @@ export type SimpleFunction = (input?: any) => void;
 
 type Links = {
   extension: {
-    browser: "chrome" | "firefox";
+    browser: 'chrome' | 'firefox';
     link: string | null;
   }[];
   ios:
@@ -130,7 +128,7 @@ type ProviderDisplay = {
 export type WalletDisplay = ProviderDisplay & {
   description?: string;
 };
-export type ConnectorType = "extension" | "qr" | "mobile" | "ios" | "android"; // "hardware"
+export type ConnectorType = 'extension' | 'qr' | 'mobile' | 'ios' | 'android'; // "hardware"
 export type WayToConnect = {
   id: string;
   type: ConnectorType;
@@ -215,7 +213,7 @@ export type ProviderOptionsWithConnectorOptional = {
   defaultWalletWaysToConnect?: ConnectorType[];
 };
 
-type UserProviderOptions = Omit<ProviderOptionsWithConnectorOptional, "id">;
+type UserProviderOptions = Omit<ProviderOptionsWithConnectorOptional, 'id'>;
 export type UserProvidersOptions = {
   [id: string]: UserProviderOptions;
 };
@@ -226,7 +224,6 @@ export type EventCallback = {
 };
 
 export type VenomConnectOptions = {
-  theme: ThemeNameList | ThemeConfig["theme"];
   providersOptions: UserProvidersOptions;
   checkNetworkId: number | number[];
   checkNetworkName?: string;
