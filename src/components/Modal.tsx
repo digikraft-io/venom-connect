@@ -25,7 +25,7 @@ const DoneButton = styled.div`
   justify-content: center;
   margin-top: 20px;
 
-  font-family: 'Poppins';
+  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -481,10 +481,6 @@ export const Modal = ({
 
   return (
     <>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
-        rel="stylesheet"
-      />
       <style>
         {`
           #${VENOM_CONNECT_MODAL_ID} a {

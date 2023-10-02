@@ -184,8 +184,9 @@ const SMainSection = styled.div<MainSection>`
 `;
 
 const STitle = styled.div`
-  font-size: 18px;
+  font-size: 16px;
   line-height: 20px;
+  font-weight: 500;
 `;
 
 type SubTitleText = {

@@ -18,7 +18,7 @@ const SBackdrop = styled.div<BackdropStyleProps>`
   transition: all ${SECONDS / 2}s ease-in-out;
 
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Work Sans', sans-serif;
   font-style: normal;
   font-weight: 400;
   color: ${({
@@ -124,10 +124,6 @@ const SModalCardWrapper = styled.div<ModalCardWrapperStyleProps>`
   pointer-events: ${({ visible }) => (visible ? 'auto' : 'none')};
 
   max-width: 450px;
-  padding: ${({ border: { width } }) => `${width}px`};
-  background: ${({ border: { color } }) => color};
-  border-radius: ${({ border: { borderRadius } }) =>
-    typeof borderRadius === 'string' ? borderRadius : `${borderRadius}px`};
   /* ========================= */
 `;
 
@@ -151,16 +147,8 @@ const SModalCard = styled.div<ModalCardStyleProps>`
 
   /* ========================= */
   padding: 30px;
-  background: ${({
-    popup: {
-      background: { color }
-    }
-  }) => color};
-  backdrop-filter: ${({
-    popup: {
-      background: { backdropFilter }
-    }
-  }) => backdropFilter};
+  border: solid #ddd 1px;
+  background: #fff;
   border-radius: 12px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   /* ========================= */
@@ -182,11 +170,9 @@ const SCardHeader = styled.div<CardHeader>`
   align-items: flex-start;
   text-align: left;
 
-  font-weight: ${({ fontWeight }) => fontWeight || 600};
-  font-size: ${({ fontSize }) =>
-    (typeof fontSize === 'number' ? `${fontSize}px` : fontSize) || '24px'};
-  line-height: ${({ lineHeight }) =>
-    (typeof lineHeight === 'number' ? `${lineHeight}px` : lineHeight) || '28px'};
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
 `;
 
 type TextAlign = {

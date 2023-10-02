@@ -5,8 +5,6 @@ type CloseCrossWrapperProps = {
   hoverColor?: string;
 };
 const SCloseCrossWrapper = styled.div<CloseCrossWrapperProps>`
-  transform: translateX(50%);
-
   cursor: pointer;
   --close-color: ${({ color }) => color};
   transition: all 0.2s;
