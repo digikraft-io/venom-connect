@@ -26,6 +26,7 @@ const SProviderContainerWrapper = styled.div<ProviderContainerWrapper>`
   cursor: pointer;
 
   background: transparent;
+  transition: all 0.2s;
 
   /* ========================= */
   margin-top: ${({ isShowCheckWarnings, isFirst }) =>
@@ -301,7 +302,6 @@ export const ProviderCard = ({
     </>
   );
 
-  // это плашка под экстеншенами в случае их отсутствия
   const NotSupportedText = (
     <>
       {!isCurrentBrowser && (
@@ -412,7 +412,6 @@ export const ProviderCard = ({
     return '';
   };
 
-  // список способов подключения
   return (
     <SWrapper onClick={onClick}>
       {isShowBadBrowserWarning && NotSupportedBadge}

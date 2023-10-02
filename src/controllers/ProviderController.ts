@@ -37,7 +37,6 @@ export const getPromiseRaw = (
               resolve(windowObject.__venom);
               return;
             }
-            // let nTries = 0; // число попыток, иначе он будет бесконечно, может это вынести в конфиг
             let interval = setInterval(() => {
               if (windowObject.__venom && !windowObject.__venom.isOneArt) {
                 clearInterval(interval);
@@ -62,7 +61,6 @@ export const getPromiseRaw = (
               resolve(windowObject.__ever);
               return;
             }
-            // let nTries = 0; // число попыток, иначе он будет бесконечно, может это вынести в конфиг
             let interval = setInterval(() => {
               if (windowObject.__ever) {
                 clearInterval(interval);
@@ -88,7 +86,6 @@ export const getPromiseRaw = (
               resolve(windowObject.__oxy);
               return;
             }
-            // let nTries = 0; // число попыток, иначе он будет бесконечно, может это вынести в конфиг
             let interval = setInterval(() => {
               if (windowObject.__oxy) {
                 clearInterval(interval);
@@ -231,7 +228,6 @@ export class ProviderController {
 
     this.providerOptions = options.providersOptions;
 
-    // TODO можно будет задать order для списка
     this.providers = (Object.keys(allProviders.connectors).reverse() || [])
       .filter(id => this.providerOptions?.[id])
       .map(id => {

@@ -123,7 +123,7 @@ const SModalCardWrapper = styled.div<ModalCardWrapperStyleProps>`
   visibility: ${({ visible }) => (visible ? 'visible' : 'hidden')};
   pointer-events: ${({ visible }) => (visible ? 'auto' : 'none')};
 
-  max-width: ${({ maxWidth }) => (maxWidth ? `${maxWidth}px` : '400px')};
+  max-width: 450px;
   padding: ${({ border: { width } }) => `${width}px`};
   background: ${({ border: { color } }) => color};
   border-radius: ${({ border: { borderRadius } }) =>
@@ -150,12 +150,7 @@ const SModalCard = styled.div<ModalCardStyleProps>`
   align-items: center;
 
   /* ========================= */
-  padding: 28px
-    ${({
-      popup: {
-        border: { width }
-      }
-    }) => `${40 - width}px`};
+  padding: 30px;
   background: ${({
     popup: {
       background: { color }
@@ -166,11 +161,8 @@ const SModalCard = styled.div<ModalCardStyleProps>`
       background: { backdropFilter }
     }
   }) => backdropFilter};
-  border-radius: ${({
-    popup: {
-      border: { borderRadius }
-    }
-  }) => (typeof borderRadius === 'string' ? borderRadius : `${borderRadius - 1}px`)};
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   /* ========================= */
 
   background-position: center;
@@ -212,8 +204,6 @@ type ScrollSection = {
 };
 
 const SScrollSection = styled.div<ScrollSection>`
-  max-width: 364px;
-
   height: 100%;
   max-height: ${({ isDesktop }) =>
     `${isDesktop ? 'min(calc(100vh - 210px), 360px)' : '100vh'}`};

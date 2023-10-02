@@ -9,7 +9,6 @@ export const setupNetworkIdTimer = (
   if (provider && address && window && !window.venomNetworkIntervalId) {
     window.venomNetworkIntervalId = window.setInterval(async () => {
       const state = await provider?.getProviderState?.();
-      // если есть белый список, то чекаем, иначе можно всем
       let isAllowedId = true;
       if (allowedNetworkIds !== undefined) {
         if (Array.isArray(allowedNetworkIds)) {

@@ -173,10 +173,6 @@ class VenomConnect {
     await toggleExtensionWindow(params);
   }
 
-  // работа с логином
-  // покажем попап со способами подключения (для мобил - сразу выбор аккаунта)
-  // как использовать в случае если уже залогинен - непонятно
-
   /**
    * This function causes the pop-up to be displayed with the available connection methods: through the extension, links to mobile applications.
    *
@@ -196,23 +192,21 @@ class VenomConnect {
       const authList = await this.checkAuth(connectorIdList);
 
       if (!authList || !authList.length) {
-        // проверяем что мобильный venom
+        // venom
         if (this.checkIsWalletBrowser().isVenomWalletBrowser) {
           await this.connectTo('venomwallet', 'extension');
 
-          // проверяем что мобильный ever
+          // ever
         } else if (this.checkIsWalletBrowser().isEverWalletBrowser) {
           await this.connectTo('everwallet', 'extension');
 
-          // проверяем что мобильный oxychat
+          // oxychat
         } else if (this.checkIsWalletBrowser().isOxyWalletBrowser) {
           await this.connectTo('oxychatwallet', 'extension');
 
           // check OneArt
         } else if (this.checkIsWalletBrowser().isOneartWalletBrowser) {
           await this.connectTo('oneartwallet', 'extension');
-
-          // показываем обычный попап
         } else {
           await this._toggleModal();
         }

@@ -163,7 +163,6 @@ export const Modal = ({
   // const getInitialWalletWaysToConnect = () =>
   //   getInitialWalletOption()?.walletWaysToConnect;
 
-  // выбираем способы подключения
   const getInitialWalletWaysToConnect = () => getWalletWaysToConnect(undefined);
 
   const getInitialWalletWayToConnect = () => {
@@ -246,7 +245,6 @@ export const Modal = ({
     onCurrentWalletSelectorClick(id);
   };
 
-  // выбран способ коннекта
   const onCurrentCardItemClick = (name: string, id: string, cb: () => void) => {
     const _walletWayToConnect = walletWaysToConnect?.find(
       _walletWayToConnect => _walletWayToConnect.name === name && _walletWayToConnect.id === id
@@ -260,8 +258,6 @@ export const Modal = ({
     }
   };
 
-  // первый шаг с кошельками
-  // сейчас не используется
   const walletCardList: Case = useMemo(() => {
     return {
       type: Slide.walletsList,
@@ -291,14 +287,12 @@ export const Modal = ({
     };
   }, [options, themeConfig.theme]);
 
-  // это уже конкретные варианты 2го уровня
   const currentWalletCards: Case = useMemo(() => {
     // const walletName = options.find(({id}) => id === walletId)?.wallet.name;
 
     return {
       type: Slide.currentWallet,
       element: (
-        // список на главной
         <SProviders>
           {walletWaysToConnect?.map(
             ({ id, name, logo, logoWhite, onClick, type, options: x }, i) => {
@@ -313,7 +307,6 @@ export const Modal = ({
                   onClick={() => onCurrentCardItemClick(name, id, onClick)}
                   connectorType={type}
                   options={x}
-                  // надо только у первого передать что он первый
                   isFirst={!i} // todo
                   isBadBrowser={
                     !options.reduce(
