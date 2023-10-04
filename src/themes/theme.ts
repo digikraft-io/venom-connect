@@ -8,7 +8,7 @@ export let theme = {
         color: '#000000'
       },
       backdrop: {
-        color: '#efefef',
+        color: '#999',
         opacity: 0.5,
         backdropFilter: 'blur(10px)'
       }

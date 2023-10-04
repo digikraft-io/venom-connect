@@ -150,7 +150,6 @@ const SModalCard = styled.div<ModalCardStyleProps>`
   border: solid #ddd 1px;
   background: #fff;
   border-radius: 12px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   /* ========================= */
 
   background-position: center;
